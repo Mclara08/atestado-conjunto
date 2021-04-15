@@ -9,6 +9,12 @@ def home(request):
     data['db'] = Atestados.objects.all()
     return render(request, 'index.html', data)
 
+#pesquisa = referente à página de pesquisa
+def pesquisa(request):
+    data = {}
+    data['db'] = Atestados.objects.all()
+    return render(request, 'pesquisa.html', data)
+
 def form(request):
     data = {}
     data['form'] = AtestadosForm()
@@ -26,6 +32,16 @@ def view(request, pk):
     data = {}
     data['db'] = Atestados.objects.get(pk=pk)
     return render(request, 'view.html', data)
+
+#search = método que pega o conteúdo de um formulário
+def search(request):
+    return None
+
+#searchall = pesquisa todos os campos
+def searchall(request):
+    dados = {}
+    dados['db'] = Atestados.objects.all()
+    return render(request, 'pesquisa.html', dados)
 
 # Função para tela de edição de atestados
 def edit(request, pk):
@@ -47,4 +63,4 @@ def update(request, pk):
 def delete(request, pk):
     db = Atestados.objects.get(pk=pk)
     db.delete()
-    return redirect('home')
+    return redirect('pesquisa')

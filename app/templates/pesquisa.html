@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Pesquisa</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+
+<!--Barra de navegação-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Entrega de Atestados</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/form">Cadastrar <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/pesquisa">Pesquisar <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!--Título-->
+<div class="col-8 m-auto pt-4 pb-3 text-center">
+    <p class="h1">PESQUISA</p>
+</div>
+<!--Formulário de pesquisa-->
+<div class="container">
+    <div class="col-sm-12">
+        <form name="formpesquisa" id="form" method="post">
+            <div class="row">
+                <div class="form-group col-4">
+                    <label for="atestado-id">Número de identificação: </label>
+                    <input type="text" class="form-control" id="atestado-id" placeholder="Digite o número de ID">
+                </div>
+                <div class="form-group col-4">
+                    <label for="cliente">Cliente: </label>
+                    <select class="form-control" id="cliente">
+                        <option value="None">-------</option>
+                        {%for linhas in db%}
+                        <option value="{{linhas.cliente}}">{{linhas.cliente.nome}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+                <div class="form-group col-4">
+                    <label for="servico">Tipo de serviço: </label>
+                    <select class="form-control" id="servico">
+                        <option value="None">-------</option>
+                        {%for linhas in db%}
+                        <option value="{{linhas.servico}}">{{linhas.servico}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+                <div class="form-group col-4">
+                    <label for="data1">Data: </label>
+                    <input type="date" class="form-control" id="data1" value="{{linhas.data_de_emissao}}">
+                </div>
+                <div class="form-group col-4">
+                    <label for="empresa">Selecione a empresa</label>
+                    <select class="form-control" id="empresa">
+                        <option value="None">-------</option>
+                        {%for linhas in db%}
+                        <option value="{{linhas.empresa}}">{{linhas.empresa.nome}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>
+            <a href="/pesquisa/searchall/" type="submit" class="btn btn-primary ml-3">Mostrar tudo</a>
+            <a href="#" type="submit" class="btn btn-success ml-3">Pesquisar</a>
+        </form>
+    </div>
+</div>
+<!--Lista de resultados-->
+<div class="container-fluid">
+    <div class="col-10 m-auto pt-3 pb-2 text-center">
+        <p class="h2 pb-2 pt-2">Resultados</p>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Número de atestado</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Data de emissão</th>
+                <th scope="col">Tipo de serviço</th>
+                <th scope="col">Empresa</th>
+                <th scope="col">Arquivo</th>
+                <th scope="col">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            {%if db%}
+                {%for linhas in db%}
+                <tr>
+                    <th scope="row">{{linhas.numero_documento}}</th>
+                    <td>{{linhas.cliente.nome}}</td>
+                    <td>{{linhas.data_emissao}}</td>
+                    <td>{{linhas.tipo_de_servico}}</td>
+                    <td>{{linhas.empresa.nome}}</td>
+                    <td><a href="{{linhas.documento_pdf.url}}" class="btn btn-primary btn-sm" target="_blank">Download PDF</a></td>
+                    <td>
+                        <a href="/pesquisa/view/{{linhas.id}}/" class="btn btn-link">Visualizar campo</a>
+                    </td>
+                </tr>
+                {%empty%}
+                <tr>
+                    <th scope="row">
+                    <td>Não contém nenhum registro</td>
+                    </th>
+                </tr>
+                {%endfor%}
+            {%else%}
+            {%endif%}
+            </tbody>
+        </table>
+    </div>
+</div>
+{%load static%}
+<script src="{%static 'javascript.js'%}"></script>
+</body>
+</html>
