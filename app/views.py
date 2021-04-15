@@ -35,7 +35,16 @@ def view(request, pk):
 
 #search = método que pega o conteúdo de um formulário
 def search(request):
-    return None
+    atestado = None
+    atest = None
+    atestados = Atestados.objects.all()
+
+    for atest in atestados:
+        myFilter = AtestadosForm(request.GET, queryset=atest)
+        atestado = myFilter.qs
+
+    context = {'atestados': atestados, 'myFilter': atestado, 'db': atest}
+    return render(request, 'pesquisa.html', context)
 
 #searchall = pesquisa todos os campos
 def searchall(request):
