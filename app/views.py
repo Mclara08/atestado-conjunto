@@ -37,17 +37,16 @@ def view(request, pk):
 def search(request):
     data = {}
     if request.method=="POST":
-        numero=request.POST.get('atestado_num')
+        numero=request.POST.get('numero')
         cliente=request.POST.get('cliente')
         servico=request.POST.get('servico')
         date=request.POST.get('data')
         empresa=request.POST.get('empresa')
-        data['atestados'] = Atestados.objects.all().raw('select * from app_atestados where numero_documento = %s and tipo_de_servico = %s and cliente_id = %s and empresa_id = %s data_emissao= %s', [numero], [servico], [cliente], [empresa], [date])
+        data['atestados'] = Atestados.objects.all().raw('select * from app_atestados where numero_documento = %s and tipo_de_servico = %s', [numero], [servico])
         return render(request, 'pesquisa.html', data)
     else:
         data['dados'] = Atestados.objects.all()
         return render(request, 'pesquisa.html', data)
-
 
 #searchall = pesquisa todos os campos
 def searchall(request):

@@ -6,7 +6,3 @@ class AtestadosForm(ModelForm):
     class Meta:
         model = Atestados
         fields = ['numero_documento', 'tipo_de_servico', 'data_emissao', 'empresa', 'cliente', 'documento_pdf']
-
-class AtestadosPesquisa(ModelForm):
-    model = Atestados
-    fields = ['numero_documento', 'tipo_de_servico', 'data_emissao', 'empresa', 'cliente']
