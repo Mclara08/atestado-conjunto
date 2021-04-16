@@ -11,7 +11,7 @@
 
 <!--Barra de navegação-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">Entrega de db</a>
+    <a class="navbar-brand" href="/">Entrega de Atestados</a>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item">
@@ -120,9 +120,7 @@
                     <td>{{linhas.tipo_de_servico}}</td>
                     <td>{{linhas.empresa.nome}}</td>
                     <td><a href="{{linhas.documento_pdf.url}}" class="btn btn-primary btn-sm" target="_blank">Download PDF</a></td>
-                    <td>
-                        <a href="/pesquisa/view/{{linhas.id}}/" class="btn btn-link">Visualizar campo</a>
-                    </td>
+                    <td><a href="/pesquisa/view/{{linhas.id}}/" class="btn btn-link">Visualizar campo</a></td>
                 </tr>
                 {%empty%}
                 <tr>
