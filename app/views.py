@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from app.forms import AtestadosForm
+from app.forms import *
 from app.models import Atestados
 from django.core.files.storage import FileSystemStorage
 
@@ -35,16 +35,19 @@ def view(request, pk):
 
 #search = método que pega o conteúdo de um formulário
 def search(request):
-    atestado = None
-    atest = None
-    atestados = Atestados.objects.all()
+    data = {}
 
-    for atest in atestados:
-        myFilter = AtestadosForm(request.GET, queryset=atest)
-        atestado = myFilter.qs
+    if request.method=="POST":
+        numero=request.POST.get('atestado_num')
+        cliente=request.POST.get('cliente')
+        servico=request.POST.get('servico')
+        date=request.POST.get('data')
+        empresa=request.POST.get('empresa')
+        data['atestados'] = Atestados.objects.raw('select * from app_atestados where numero_documento = "'+numero+'" and cliente_id ="'+cliente+'" and tipo_de_servico="'+servico+'" and data_emissao="'+date+'" and empresa_id = "'+empresa+'"')
+    else:
+        data['db'] = Atestados.objects.all()
 
-    context = {'atestados': atestados, 'myFilter': atestado, 'db': atest}
-    return render(request, 'pesquisa.html', context)
+    return render(request, 'pesquisa.html', data)
 
 #searchall = pesquisa todos os campos
 def searchall(request):
