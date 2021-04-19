@@ -36,14 +36,21 @@ def view(request, pk):
 #search = método que pega o conteúdo de um formulário
 def search(request):
     data = {}
-    if request.method=="POST":
-        numero=request.POST.get('numero')
-        cliente=request.POST.get('cliente')
-        servico=request.POST.get('servico')
-        date=request.POST.get('data')
-        empresa=request.POST.get('empresa')
-        data['atestados'] = Atestados.objects.all().raw('select * from app_atestados where numero_documento = %s and tipo_de_servico = %s', [numero], [servico])
+    atestados = list(Atestados.objects.all())
+    lista = []
+    if request.method=="GET":
+        numero = request.GET.get('numero_documento')
+        servico = request.GET.get('tipo_de_servico')
+        data_emissao = request.GET.get('data_emissao')
+        cliente = request.GET.get('cliente_id')
+        empresa = request.GET.get('empresa_id')
+
+        for atest in atestados:
+            if atest.numero_documento == numero:
+                lista.append(atest)
+                data['atestados'] = lista
         return render(request, 'pesquisa.html', data)
+
     else:
         data['dados'] = Atestados.objects.all()
         return render(request, 'pesquisa.html', data)

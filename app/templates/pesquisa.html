@@ -32,16 +32,16 @@
 <!--Formulário de pesquisa-->
 <div class="container">
     <div class="col-sm-12">
-        <form name="formpesquisa" id="form" method="POST">
+        <form name="formpesquisa" id="form" method="GET" action="/search/">
             {%csrf_token%}
             <div class="row">
                 <div class="form-group col-4">
                     <label>Número de identificação: </label>
-                    <input type="search" class="form-control" name="numero" placeholder="Digite o número de ID">
+                    <input type="search" class="form-control" id="numero" name="numero_documento" placeholder="Digite o número de ID">
                 </div>
                 <div class="form-group col-4">
                     <label>Cliente: </label>
-                    <select class="form-control" name="cliente">
+                    <select class="form-control" name="cliente_id">
                         <option>-------</option>
                         <option value="1">Banco do Brasil</option>
                         <option value="2">ANA - Agência Nacional de Águas</option>
@@ -50,7 +50,7 @@
                 </div>
                 <div class="form-group col-4">
                     <label>Tipo de serviço: </label>
-                    <select class="form-control" name="servico">
+                    <select class="form-control" name="tipo_de_servico">
                         <option>-------</option>
                         <option value="Service Desk">Service Desk</option>
                         <option value="Suporte">Suporte</option>
@@ -60,11 +60,11 @@
                 </div>
                 <div class="form-group col-4">
                     <label>Data: </label>
-                    <input type="search" class="form-control" name="data" placeholder="dd/MM/aaaa">
+                    <input type="search" class="form-control" name="data_emissao" placeholder="dd/MM/aaaa">
                 </div>
                 <div class="form-group col-4">
                     <label>Selecione a empresa</label>
-                    <select class="form-control" name="empresa">
+                    <select class="form-control" name="empresa_id">
                         <option>-------</option>
                         <option value="1">Qintess</option>
                         <option value="2">Resource IT</option>
@@ -74,8 +74,6 @@
             </div>
             <a  href="/pesquisa/search/" type="submit" class="btn btn-success ml-3" value="Pesquisar">Pesquisar</a>
             <a href="/pesquisa/searchall/" type="submit" class="btn btn-primary ml-3">Mostrar tudo</a>
-
-
         </form>
     </div>
     <div class="container-fluid">
@@ -116,7 +114,7 @@
                 </th>
             </tr>
             {%endfor%}
-            {%else%}
+            {% elif atestados%}
             {%for linhas in atestados%}
             <tr>
                 <th scope="row">{{linhas.numero_documento}}</th>
@@ -131,6 +129,24 @@
             <tr>
                 <th scope="row">
                 <td>Não contém nenhum registro</td>
+                </th>
+            </tr>
+            {%endfor%}
+            {%else%}
+            {%for linhas in dados%}
+            <tr>
+                <th scope="row">{{linhas.numero_documento}}</th>
+                <td>{{linhas.cliente.nome}}</td>
+                <td>{{linhas.data_emissao}}</td>
+                <td>{{linhas.tipo_de_servico}}</td>
+                <td>{{linhas.empresa.nome}}</td>
+                <td><a href="{{linhas.documento_pdf.url}}" class="btn btn-primary btn-sm" target="_blank">Download PDF</a></td>
+                <td><a href="/pesquisa/view/{{linhas.id}}/" class="btn btn-link">Visualizar campo</a></td>
+            </tr>
+            {%empty%}
+            <tr>
+                <th scope="row">
+                    <td>Não contém nenhum registro</td>
                 </th>
             </tr>
             {%endfor%}

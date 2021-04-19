@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from app.models import Atestados
-from app.models import Empresa
+from django import forms
 
 class AtestadosForm(ModelForm):
     class Meta:
