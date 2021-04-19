@@ -32,12 +32,12 @@
 <!--Formulário de pesquisa-->
 <div class="container">
     <div class="col-sm-12">
-        <form name="formpesquisa" id="form" method="GET" action="/search/">
+        <form name="formpesquisa" id="form" method="GET" action=".">
             {%csrf_token%}
             <div class="row">
                 <div class="form-group col-4">
                     <label>Número de identificação: </label>
-                    <input type="search" class="form-control" id="numero" name="numero_documento" placeholder="Digite o número de ID">
+                    <input type="text" class="form-control" id="numero_documento" name="numero_documento" placeholder="Digite o número de ID">
                 </div>
                 <div class="form-group col-4">
                     <label>Cliente: </label>
@@ -50,7 +50,7 @@
                 </div>
                 <div class="form-group col-4">
                     <label>Tipo de serviço: </label>
-                    <select class="form-control" name="tipo_de_servico">
+                    <select class="form-control" name="tipo_servico">
                         <option>-------</option>
                         <option value="Service Desk">Service Desk</option>
                         <option value="Suporte">Suporte</option>
@@ -60,7 +60,7 @@
                 </div>
                 <div class="form-group col-4">
                     <label>Data: </label>
-                    <input type="search" class="form-control" name="data_emissao" placeholder="dd/MM/aaaa">
+                    <input type="text" class="form-control" name="data_emissao" placeholder="dd/MM/aaaa">
                 </div>
                 <div class="form-group col-4">
                     <label>Selecione a empresa</label>
@@ -73,7 +73,7 @@
                 </div>
             </div>
             <a  href="/pesquisa/search/" type="submit" class="btn btn-success ml-3" value="Pesquisar">Pesquisar</a>
-            <a href="/pesquisa/searchall/" type="submit" class="btn btn-primary ml-3">Mostrar tudo</a>
+            <a href="/pesquisa/searchall/" type="submit" class="btn btn-primary">Mostrar tudo</a>
         </form>
     </div>
     <div class="container-fluid">
