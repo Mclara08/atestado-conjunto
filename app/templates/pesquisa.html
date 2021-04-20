@@ -32,47 +32,31 @@
 <!--Formulário de pesquisa-->
 <div class="container">
     <div class="col-sm-12">
-        <form name="formpesquisa" id="formpesquisa" method="GET" action="/search/">
+        <form name="formpesquisa" id="formpesquisa" method="POST" action="/search/">
             {%csrf_token%}
             <div class="row">
                 <div class="form-group col-4">
                     <label>Número de identificação: </label>
-                    <input type="text" class="form-control" id="numero_documento" name="numero_documento" placeholder="Digite o número de ID">
+                    {%if form%}{{form.numero_documento}}{%endif%}
                 </div>
                 <div class="form-group col-4">
                     <label>Cliente: </label>
-                    <select class="form-control" name="cliente_id">
-                        <option>-------</option>
-                        <option value="1">Banco do Brasil</option>
-                        <option value="2">ANA - Agência Nacional de Águas</option>
-                        <option value="3">Caixa Econômica Federal</option>
-                    </select>
+                    {%if form%}{{form.cliente}}{%endif%}
                 </div>
                 <div class="form-group col-4">
                     <label>Tipo de serviço: </label>
-                    <select class="form-control" name="tipo_servico">
-                        <option>-------</option>
-                        <option value="Service Desk">Service Desk</option>
-                        <option value="Suporte">Suporte</option>
-                        <option value="Desenvolvimento">Desenvolvimento</option>
-                        <option value="ITS">ITS</option>
-                    </select>
+                    {%if form%}{{form.tipo_de_servico}}{%endif%}
                 </div>
                 <div class="form-group col-4">
                     <label>Data: </label>
-                    <input type="text" class="form-control" name="data_emissao" placeholder="dd/MM/aaaa">
+                    {%if form%}{{form.data_emissao}}{%endif%}
                 </div>
                 <div class="form-group col-4">
                     <label>Selecione a empresa</label>
-                    <select class="form-control" name="empresa_id">
-                        <option>-------</option>
-                        <option value="1">Qintess</option>
-                        <option value="2">Resource IT</option>
-                        <option value="3">Cimcorp</option>
-                    </select>
+                    {%if form%}{{form.empresa}}{%endif%}
                 </div>
             </div>
-            <a href="/pesquisa/search/" type="submit" class="btn btn-success ml-3" value="Pesquisar">Pesquisar</a>
+            <a href="/pesquisa/search/" type="submit" class="btn btn-success ml-3">Pesquisar</a>
             <a href="/pesquisa/searchall/" type="submit" class="btn btn-primary">Mostrar tudo</a>
         </form>
     </div>

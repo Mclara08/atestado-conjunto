@@ -7,3 +7,4 @@ class AtestadosForm(ModelForm):
         model = Atestados
         fields = ['numero_documento', 'tipo_de_servico', 'data_emissao', 'empresa', 'cliente', 'documento_pdf']
 
+
