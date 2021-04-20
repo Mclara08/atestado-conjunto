@@ -12,24 +12,8 @@ def home(request):
 #pesquisa = referente à página de pesquisa
 def pesquisa(request):
     data = {}
-    atestados = list(Atestados.objects.all())
-    lista = []
-    if request.method == "GET":
-        numero = request.GET.get('numero_documento', default=None)
-        for num in numero:
-            num = numero.numero_documento
-        servico = request.GET.getlist('tipo_servico', default=None)
-        data_emissao = request.GET.getlist('data_emissao', default=None)
-        cliente = request.GET.getlist('cliente_id', default=None)
-        empresa = request.GET.getlist('empresa_id', default=None)
-
-        for atest in atestados:
-            if atest.numero_documento == num:
-                lista.append(atest)
-                data['atestados'] = lista
-        else:
-            data['dados'] = Atestados.objects.all()
-        return render(request, 'pesquisa.html', data)
+    data['db'] = Atestados.objects.all()
+    return render(request, 'pesquisa.html', data)
 
 def form(request):
     data = {}
@@ -51,7 +35,23 @@ def view(request, pk):
 
 #search = método que pega o conteúdo de um formulário
 def search(request):
-    return None
+    data = {}
+    atestados = list(Atestados.objects.prefetch_related('empresa').prefetch_related('cliente').all())
+    lista = []
+    if request.method == "GET":
+        numero = request.GET.get('numero_documento')
+        servico = request.GET.get('tipo_servico')
+        data_emissao = request.GET.get('data_emissao')
+        cliente = request.GET.get('cliente_id')
+        empresa = request.GET.get('empresa_id')
+
+        for atest in atestados:
+            if atest.numero_documento == '4':
+                lista.append(atest)
+                data['atestados'] = lista
+        else:
+            data['dados'] = Atestados.objects.all()
+        return render(request, 'pesquisa.html', data)
 
 #searchall = pesquisa todos os campos
 def searchall(request):

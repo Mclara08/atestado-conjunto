@@ -32,7 +32,7 @@
 <!--Formulário de pesquisa-->
 <div class="container">
     <div class="col-sm-12">
-        <form name="formpesquisa" id="form" method="GET" action=".">
+        <form name="formpesquisa" id="formpesquisa" method="GET" action="/search/">
             {%csrf_token%}
             <div class="row">
                 <div class="form-group col-4">
@@ -72,7 +72,7 @@
                     </select>
                 </div>
             </div>
-            <a  href="/pesquisa/search/" type="submit" class="btn btn-success ml-3" value="Pesquisar">Pesquisar</a>
+            <a href="/pesquisa/search/" type="submit" class="btn btn-success ml-3" value="Pesquisar">Pesquisar</a>
             <a href="/pesquisa/searchall/" type="submit" class="btn btn-primary">Mostrar tudo</a>
         </form>
     </div>
