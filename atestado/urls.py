@@ -18,13 +18,12 @@ from django.contrib import admin
 from django.urls import path
 
 from atestado import settings
-from app.views import home, pesquisa, search, searchall, form, create, view, edit, update, delete
+from app.views import home, pesquisa, searchall, form, create, view, edit, update, delete
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('pesquisa/', pesquisa, name='pesquisa'),
-    path('pesquisa/search/', search, name='search'),
     path('pesquisa/searchall/', searchall, name='searchall'),
     path('form/', form, name='form'),
     path('create/', create, name='create'),
