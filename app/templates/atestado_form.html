@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
+{% load crispy_forms_tags %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -34,37 +36,14 @@
 </div>
 
 <!-- Formulário cadastro/atualização de atestados -->
-<div class="col-8 m-auto pt-2 pb-2">
+<div class="col-5 m-auto pt-2 pb-2">
     <div id="result"></div>
     <form name="form" id="form" action="{% if db %}/update/{{db.id}}/{% else %}/create/{% endif %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="form-group col-md-6">
-            <label>N° do Documento:</label>
-            <div class="form-group pb-3">{{form.numero_documento}}</div>
+        {{ form|crispy }}
+        <div class="text-center">
+            <input type="submit" class="btn btn-success">
         </div>
-        <div class="form-group col-md-6">
-            <label>Serviço</label>
-            <div class="form-group pb-3">{{form.tipo_de_servico}}</div>
-        </div>
-        <div class="form-group col-md-6">
-            <label>Data de emissão: </label>
-            <div class="form-group pb-3">{{form.data_emissao}}</div>
-        </div>
-        <div class="form-row col-md-6">
-            <div class="form-group">
-                <label>Empresa: </label>
-                <div class="form-group pb-3">{{form.empresa}}</div>
-            </div>
-            <div class="form-group col-md-6">
-                <label>Cliente</label>
-                <div class="form-group pb-3">{{form.cliente}}</div>
-            </div>
-            <div class="form-group col-md-6">
-                <label>Arquivo</label>
-                <div class="form-group pb-3">{{form.documento_pdf}}</div>
-            </div>
-        </div>
-        <input type="submit" class="btn btn-success">
     </form>
 </div>
 {% load static %}
