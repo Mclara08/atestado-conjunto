@@ -15,7 +15,7 @@ class Cliente(models.Model):
         return self.nome
 
 class Atestados(models.Model):
-    numero_documento = models.CharField(max_length=30)
+    numero_documento = models.CharField(max_length=30, unique=True)
 
     servico = (('Desenvolvimento', 'Desenvolvimento'),
                ('ITS', 'ITS'),
