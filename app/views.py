@@ -1,6 +1,8 @@
+import datetime as dt
 from django.shortcuts import render, redirect
-from app.forms import AtestadosForm
+from app.forms import *
 from app.models import Atestados
+from django.db.models import Q
 from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
@@ -12,8 +14,36 @@ def home(request):
 #pesquisa = referente à página de pesquisa
 def pesquisa(request):
     data = {}
-    data['db'] = Atestados.objects.all()
-    return render(request, 'pesquisa.html', data)
+    busca_numero = request.GET.get('busca_numero')
+    busca_servico = request.GET.get('busca_servico')
+    busca_cliente = request.GET.get('busca_cliente')
+    busca_data_emissao1 = request.GET.get('busca_data_emissao1')
+    busca_data_emissao2 = request.GET.get('busca_data_emissao2')
+    busca_empresa = request.GET.get('busca_empresa')
+    lista_pesquisa = (Q(id__gt=0))
+
+    if busca_numero:
+        lista_pesquisa.add(Q(numero_documento=busca_numero), Q.AND)
+    if busca_servico:
+        lista_pesquisa.add(Q(tipo_de_servico=busca_servico), Q.AND)
+    if busca_cliente:
+        lista_pesquisa.add(Q(cliente=busca_cliente), Q.AND)
+    if busca_data_emissao1 and busca_data_emissao2:
+        lista_pesquisa.add(Q(data_emissao__range=[busca_data_emissao1, busca_data_emissao2]), Q.AND)
+    elif busca_data_emissao1 or busca_data_emissao2:
+        if busca_data_emissao1:
+            lista_pesquisa.add(Q(data_emissao=busca_data_emissao1), Q.AND)
+        else:
+            lista_pesquisa.add(Q(data_emissao=busca_data_emissao2), Q.AND)
+    if busca_empresa:
+        lista_pesquisa.add(Q(empresa=busca_empresa), Q.AND)
+
+    if lista_pesquisa == []:
+        data['db'] = Atestados.objects.all()
+        return render(request, 'pesquisa.html', data)
+    else:
+        data['db'] = Atestados.objects.filter(lista_pesquisa)
+        return render(request, 'pesquisa.html', data)
 
 def form(request):
     data = {}
@@ -32,10 +62,6 @@ def view(request, pk):
     data = {}
     data['db'] = Atestados.objects.get(pk=pk)
     return render(request, 'view.html', data)
-
-#search = método que pega o conteúdo de um formulário
-def search(request):
-    return None
 
 #searchall = pesquisa todos os campos
 def searchall(request):

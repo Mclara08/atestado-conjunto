@@ -28,56 +28,57 @@
 <div class="col-8 m-auto pt-4 pb-3 text-center">
     <p class="h1">PESQUISA</p>
 </div>
+
 <!--Formulário de pesquisa-->
 <div class="container">
     <div class="col-sm-12">
-        <form name="formpesquisa" id="form" method="post">
+        <form name="formpesquisa" id="formpesquisa" method="GET" action="/pesquisa/">
+            {%csrf_token%}
             <div class="row">
                 <div class="form-group col-4">
-                    <label for="atestado-id">Número de identificação: </label>
-                    <input type="text" class="form-control" id="atestado-id" placeholder="Digite o número de ID">
+                    <label>Número de identificação: </label>
+                    <input type="text" name="busca_numero" id="busca_numero" class="form-control">
                 </div>
                 <div class="form-group col-4">
-                    <label for="cliente">Cliente: </label>
-                    <select class="form-control" id="cliente">
-                        <option value="None">-------</option>
-                        {%for linhas in db%}
-                        <option value="{{linhas.cliente}}">{{linhas.cliente.nome}}</option>
-                        {%endfor%}
+                    <label>Tipo de serviço: </label>
+                    <input type="text" name="busca_servico" id="busca_servico" class="form-control">
+                </div>
+                <div class="form-group col-4">
+                    <label>Cliente: </label>
+                    <select name="busca_cliente" id="busca_cliente" class="form-control">
+                        <option></option>
+                        <option value="1">Banco do Brasil</option>
+                        <option value="2">ANA - Agência Nacional de Águas</option>
+                        <option value="3">Caixa Econômica Federal</option>
                     </select>
                 </div>
                 <div class="form-group col-4">
-                    <label for="servico">Tipo de serviço: </label>
-                    <select class="form-control" id="servico">
-                        <option value="None">-------</option>
-                        {%for linhas in db%}
-                        <option value="{{linhas.servico}}">{{linhas.servico}}</option>
-                        {%endfor%}
-                    </select>
+                    <label>Data inicial: </label>
+                    <input type="date" name="busca_data_emissao1" id="busca_data1" class="form-control">
                 </div>
                 <div class="form-group col-4">
-                    <label for="data1">Data: </label>
-                    <input type="date" class="form-control" id="data1" value="{{linhas.data_de_emissao}}">
+                    <label>Data final: </label>
+                    <input type="date" name="busca_data_emissao2" id="busca_data2" class="form-control">
                 </div>
                 <div class="form-group col-4">
-                    <label for="empresa">Selecione a empresa</label>
-                    <select class="form-control" id="empresa">
-                        <option value="None">-------</option>
-                        {%for linhas in db%}
-                        <option value="{{linhas.empresa}}">{{linhas.empresa.nome}}</option>
-                        {%endfor%}
+                    <label>Empresa</label>
+                    <select name="busca_empresa" id="busca_empresa" class="form-control">
+                        <option></option>
+                        <option value="1">Qintess</option>
+                        <option value="2">Resource IT</option>
+                        <option value="3">Cimcorp</option>
                     </select>
                 </div>
             </div>
-            <a href="/pesquisa/searchall/" type="submit" class="btn btn-primary ml-3">Mostrar tudo</a>
-            <a href="#" type="submit" class="btn btn-success ml-3">Pesquisar</a>
+            <input type="submit" class="btn btn-success ml-3" name="submit" value="Pesquisar"></input>
+            <a href="/pesquisa/searchall/" type="submit" class="btn btn-primary">Mostrar tudo</a>
         </form>
     </div>
-</div>
-<!--Lista de resultados-->
-<div class="container-fluid">
-    <div class="col-10 m-auto pt-3 pb-2 text-center">
-        <p class="h2 pb-2 pt-2">Resultados</p>
+    <div class="container-fluid">
+        <div class="col-10 m-auto pt-3 pb-2 text-center">
+            <p class="h2 pb-2 pt-2">Resultados</p>
+        </div>
+
         <table class="table">
             <thead class="thead-dark">
             <tr>
@@ -92,26 +93,25 @@
             </thead>
             <tbody>
             {%if db%}
-                {%for linhas in db%}
-                <tr>
-                    <th scope="row">{{linhas.numero_documento}}</th>
-                    <td>{{linhas.cliente.nome}}</td>
-                    <td>{{linhas.data_emissao}}</td>
-                    <td>{{linhas.tipo_de_servico}}</td>
-                    <td>{{linhas.empresa.nome}}</td>
-                    <td><a href="{{linhas.documento_pdf.url}}" class="btn btn-primary btn-sm" target="_blank">Download PDF</a></td>
-                    <td>
-                        <a href="/pesquisa/view/{{linhas.id}}/" class="btn btn-link">Visualizar campo</a>
-                    </td>
-                </tr>
-                {%empty%}
-                <tr>
-                    <th scope="row">
-                    <td>Não contém nenhum registro</td>
-                    </th>
-                </tr>
-                {%endfor%}
-            {%else%}
+            {%for linhas in db%}
+            <tr>
+                <th scope="row">{{linhas.numero_documento}}</th>
+                <td>{{linhas.cliente}}</td>
+                <td>{{linhas.data_emissao}}</td>
+                <td>{{linhas.tipo_de_servico}}</td>
+                <td>{{linhas.empresa}}</td>
+                <td><a href="{{linhas.documento_pdf.url}}" class="btn btn-primary btn-sm" target="_blank">Download PDF</a></td>
+                <td>
+                    <a href="/pesquisa/view/{{linhas.id}}/" class="btn btn-link">Visualizar campo</a>
+                </td>
+            </tr>
+            {%empty%}
+            <tr>
+                <th scope="row">
+                <td>Não contém nenhum registro</td>
+                </th>
+            </tr>
+            {%endfor%}
             {%endif%}
             </tbody>
         </table>

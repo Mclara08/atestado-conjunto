@@ -29,6 +29,12 @@ class Atestados(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.RESTRICT, null=False, related_name='rel_cliente')
     documento_pdf = models.FileField(upload_to='atestados/PDFs/')
 
+    def __getnumero__(self):
+        self.numero_documento
+
+    def __getservico__(self):
+        self.tipo_de_servico
+
     def delete(self, *args, **kwargs):
         self.documento_pdf.delete()
         super().delete(*args, **kwargs)
