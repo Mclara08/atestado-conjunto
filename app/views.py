@@ -17,7 +17,8 @@ def pesquisa(request):
     busca_numero = request.GET.get('busca_numero')
     busca_servico = request.GET.get('busca_servico')
     busca_cliente = request.GET.get('busca_cliente')
-    busca_data_emissao = request.GET.get('busca_data_emissao')
+    busca_data_emissao1 = request.GET.get('busca_data_emissao1')
+    busca_data_emissao2 = request.GET.get('busca_data_emissao2')
     busca_empresa = request.GET.get('busca_empresa')
     lista_pesquisa = (Q(id__gt=0))
 
@@ -27,8 +28,13 @@ def pesquisa(request):
         lista_pesquisa.add(Q(tipo_de_servico=busca_servico), Q.AND)
     if busca_cliente:
         lista_pesquisa.add(Q(cliente=busca_cliente), Q.AND)
-    if busca_data_emissao:
-        lista_pesquisa.add(Q(data_emissao=busca_data_emissao), Q.AND)
+    if busca_data_emissao1 and busca_data_emissao2:
+        lista_pesquisa.add(Q(data_emissao__range=[busca_data_emissao1, busca_data_emissao2]), Q.AND)
+    elif busca_data_emissao1 or busca_data_emissao2:
+        if busca_data_emissao1:
+            lista_pesquisa.add(Q(data_emissao=busca_data_emissao1), Q.AND)
+        else:
+            lista_pesquisa.add(Q(data_emissao=busca_data_emissao2), Q.AND)
     if busca_empresa:
         lista_pesquisa.add(Q(empresa=busca_empresa), Q.AND)
 

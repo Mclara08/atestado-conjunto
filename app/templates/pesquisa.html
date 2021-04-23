@@ -37,29 +37,33 @@
             <div class="row">
                 <div class="form-group col-4">
                     <label>Número de identificação: </label>
-                    <input type="text" name="busca_numero" id="busca_numero">
+                    <input type="text" name="busca_numero" id="busca_numero" class="form-control">
+                </div>
+                <div class="form-group col-4">
+                    <label>Tipo de serviço: </label>
+                    <input type="text" name="busca_servico" id="busca_servico" class="form-control">
                 </div>
                 <div class="form-group col-4">
                     <label>Cliente: </label>
                     <select name="busca_cliente" id="busca_cliente" class="form-control">
-                        <option>---</option>
+                        <option></option>
                         <option value="1">Banco do Brasil</option>
                         <option value="2">ANA - Agência Nacional de Águas</option>
                         <option value="3">Caixa Econômica Federal</option>
                     </select>
                 </div>
                 <div class="form-group col-4">
-                    <label>Tipo de serviço: </label>
-                    <input type="text" name="busca_servico" id="busca_servico">
+                    <label>Data inicial: </label>
+                    <input type="date" name="busca_data_emissao1" id="busca_data1" class="form-control">
                 </div>
                 <div class="form-group col-4">
-                    <label>Data inicial: </label>
-                    <input type="text" name="busca_data_emissao" id="busca_data">
+                    <label>Data final: </label>
+                    <input type="date" name="busca_data_emissao2" id="busca_data2" class="form-control">
                 </div>
                 <div class="form-group col-4">
                     <label>Empresa</label>
                     <select name="busca_empresa" id="busca_empresa" class="form-control">
-                        <option>---</option>
+                        <option></option>
                         <option value="1">Qintess</option>
                         <option value="2">Resource IT</option>
                         <option value="3">Cimcorp</option>
