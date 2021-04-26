@@ -6,6 +6,9 @@ from django.db.models import Q
 from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
+def login(request):
+    return render(request, 'login.html')
+
 def home(request):
     data = {}
     data['db'] = Atestados.objects.all()

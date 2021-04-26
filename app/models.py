@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Empresa(models.Model):
@@ -28,6 +29,10 @@ class Atestados(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.RESTRICT, null=False, related_name='rel_empresa')
     cliente = models.ForeignKey(Cliente, on_delete=models.RESTRICT, null=False, related_name='rel_cliente')
     documento_pdf = models.FileField(upload_to='atestados/PDFs/')
+    user = models.ForeignKey(User, on_delete=models.RESTRICT)
+
+    def __str__(self):
+        return str(self.id)
 
     def __getnumero__(self):
         self.numero_documento
