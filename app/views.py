@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
-def login(request):
+def entrar(request):
     return render(request, 'login.html')
 
 @csrf_protect
@@ -21,30 +21,30 @@ def submit(request):
         senha = request.POST.get('senha')
         user = authenticate(username=usuario, password=senha)
         if user is not None:
-            login(request)
+            login(request, user)
             return render(request, 'index.html')
         else:
             messages.error(request, 'Usuário e senha não coincidem')
             return render(request, 'login.html')
 
 def sair(request):
-    print(request.user)
     logout(request)
-    return redirect('/login')
+    return redirect('/entrar')
 
 #home = referente ao index
-@login_required(login_url='/login/')
+@login_required(login_url='/entrar/')
 def home(request):
-    if request.user is not None:
+    if request.user.is_authenticated:
         data = {}
         data['db'] = Atestados.objects.all()
         return render(request, 'index.html', data)
     else:
-        return redirect('/login')
+        messages.error(request, 'Usuário não conectado!')
+        return redirect('entrar')
 
 #pesquisa = referente à página de pesquisa
 def pesquisa(request):
-    if request.user is not None:
+    if request.user.is_authenticated:
         data = {}
         busca_numero = request.GET.get('busca_numero')
         busca_servico = request.GET.get('busca_servico')
@@ -52,7 +52,7 @@ def pesquisa(request):
         busca_data_emissao1 = request.GET.get('busca_data_emissao1')
         busca_data_emissao2 = request.GET.get('busca_data_emissao2')
         busca_empresa = request.GET.get('busca_empresa')
-        lista_pesquisa = (Q(id__gt=0))
+        lista_pesquisa = (Q(id__gt=0) & Q(user=request.user))
 
         if busca_numero:
             lista_pesquisa.add(Q(numero_documento=busca_numero), Q.AND)
@@ -77,52 +77,79 @@ def pesquisa(request):
             data['db'] = Atestados.objects.filter(lista_pesquisa)
             return render(request, 'pesquisa.html', data)
     else:
-        return redirect('/login')
+        messages.error(request, 'Usuário não conectado!')
+        return redirect('entrar')
 
 def form(request):
-    data = {}
-    data['form'] = AtestadosForm()
-    return render(request, 'atestado_form.html', data)
+    if request.user.is_authenticated:
+        data = {}
+        data['form'] = AtestadosForm()
+        return render(request, 'atestado_form.html', data)
+    else:
+        messages.error(request, 'Usuário não conectado!')
+        return redirect('entrar')
 
 # Função para cadastrar atestados
 def create(request):
-    form = AtestadosForm(request.POST, request.FILES or None)
-    print(form)
-    form.user.id = request.user
-    if form.is_valid():
-        form.save()
-        return redirect('home')
+    if request.user.is_authenticated:
+        form = AtestadosForm(request.POST, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        messages.error(request, 'Usuário não conectado!')
+        return redirect('entrar')
 
 # Função para visualizar detalhes de atestados cadastrados
 def view(request, pk):
-    data = {}
-    data['db'] = Atestados.objects.get(pk=pk)
-    return render(request, 'view.html', data)
+    if request.user.is_authenticated:
+        data = {}
+        data['db'] = Atestados.objects.get(pk=pk)
+        return render(request, 'view.html', data)
+    else:
+        messages.error(request, 'Usuário não conectado!')
+        return redirect('entrar')
 
 #searchall = pesquisa todos os campos
 def searchall(request):
-    dados = {}
-    dados['db'] = Atestados.objects.all()
-    return render(request, 'pesquisa.html', dados)
+    if request.user.is_authenticated:
+        dados = {}
+        dados['db'] = Atestados.objects.all()
+        return render(request, 'pesquisa.html', dados)
+    else:
+        messages.error(request, 'Usuário não conectado!')
+        return redirect('entrar')
 
 # Função para tela de edição de atestados
 def edit(request, pk):
-    data = {}
-    data['db'] = Atestados.objects.get(pk=pk)
-    data['form'] = AtestadosForm(instance=data['db'])
-    return render(request, 'atestado_form.html', data)
+    if request.user.is_authenticated:
+        data = {}
+        data['db'] = Atestados.objects.get(pk=pk)
+        data['form'] = AtestadosForm(instance=data['db'])
+        return render(request, 'atestado_form.html', data)
+    else:
+        messages.error(request, 'Usuário não conectado!')
+        return redirect('entrar')
 
 # Função para atualizar edições de atestados
 def update(request, pk):
-    data = {}
-    data['db'] = Atestados.objects.get(pk=pk)
-    form = AtestadosForm(request.POST, request.FILES or None, instance=data['db'])
-    if form.is_valid():
-        form.save()
-        return redirect('home')
+    if request.user.is_authenticated:
+        data = {}
+        data['db'] = Atestados.objects.get(pk=pk)
+        form = AtestadosForm(request.POST, request.FILES or None, instance=data['db'])
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        messages.error(request, 'Usuário não conectado!')
+        return redirect('entrar')
 
 # Função para deletar atestados
 def delete(request, pk):
-    db = Atestados.objects.get(pk=pk)
-    db.delete()
-    return redirect('pesquisa')
+    if request.user.is_authenticated:
+        db = Atestados.objects.get(pk=pk)
+        db.delete()
+        return redirect('pesquisa')
+    else:
+        messages.error(request, 'Usuário não conectado!')
+        return redirect('entrar')

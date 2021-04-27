@@ -16,7 +16,7 @@
 
 <!--Formulário de login-->
 <div class="container">
-    <form action="/login/submit/" method="POST">
+    <form action="/entrar/submit/" method="POST">
         {%csrf_token%}
         {%for message in messages%}
             <div class="alert alert-danger">
@@ -31,7 +31,7 @@
             <label for="senha">Password</label>
             <input type="password" class="form-control" id="senha" name="senha" placeholder="Insira sua senha">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Entrar</button>
     </form>
 </div>
 
