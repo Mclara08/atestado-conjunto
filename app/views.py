@@ -1,4 +1,6 @@
 import datetime as dt
+
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from app.forms import *
 from app.models import Atestados
@@ -54,8 +56,12 @@ def form(request):
 def create(request):
     form = AtestadosForm(request.POST, request.FILES or None)
     if form.is_valid():
+        messages.success(request, 'Operação realizada com sucesso!')
         form.save()
-        return redirect('home')
+        return redirect('form')
+    else:
+        messages.error(request, 'Operação não pôde ser realizada! Por favor, verifique se o número do documento informado já existe na base de dados.')
+        return redirect('form')
 
 # Função para visualizar detalhes de atestados cadastrados
 def view(request, pk):
