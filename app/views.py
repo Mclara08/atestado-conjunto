@@ -1,14 +1,39 @@
 import datetime as dt
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from app.forms import *
 from app.models import Atestados
+from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_protect
 from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
 def login(request):
     return render(request, 'login.html')
 
+@csrf_protect
+def submit(request):
+    if request.POST:
+        usuario = request.POST.get('cpf')
+        senha = request.POST.get('senha')
+        user = authenticate(username=usuario, password=senha)
+        if user is not None:
+            login(request)
+            return render(request, 'index.html')
+        else:
+            messages.error(request, 'Usuário e senha não coincidem')
+            return render(request, 'login.html')
+
+def sair(request):
+    print(request.user)
+    logout(request)
+    return redirect('/login')
+
+#home = referente ao index
+@login_required(login_url='/login/')
 def home(request):
     data = {}
     data['db'] = Atestados.objects.all()

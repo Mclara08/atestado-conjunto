@@ -16,8 +16,13 @@
 
 <!--Formulário de login-->
 <div class="container">
-    <form>
+    <form action="/login/submit/" method="POST">
         {%csrf_token%}
+        {%for message in messages%}
+            <div class="alert alert-danger">
+                <strong>Erro!</strong> {{message}}
+            </div>
+        {%endfor%}
         <div class="form-group">
             <label for="cpf">CPF</label>
             <input type="text" class="form-control" id="cpf" name="cpf" placeholder="Insira seu CPF">

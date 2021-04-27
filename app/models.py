@@ -29,10 +29,10 @@ class Atestados(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.RESTRICT, null=False, related_name='rel_empresa')
     cliente = models.ForeignKey(Cliente, on_delete=models.RESTRICT, null=False, related_name='rel_cliente')
     documento_pdf = models.FileField(upload_to='atestados/PDFs/')
-    user = models.ForeignKey(User, on_delete=models.RESTRICT)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return str(self.id)
+    # def __str__(self):
+    #     return str(self .id)
 
     def __getnumero__(self):
         self.numero_documento
