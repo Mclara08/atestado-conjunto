@@ -1,7 +1,10 @@
 import datetime as dt
 
 from django.contrib import messages
+<<<<<<< HEAD
 from django.contrib.auth.decorators import login_required
+=======
+>>>>>>> invalid-value-message
 from django.shortcuts import render, redirect
 from app.forms import *
 from app.models import Atestados
@@ -91,6 +94,7 @@ def form(request):
 
 # Função para cadastrar atestados
 def create(request):
+<<<<<<< HEAD
     if request.user.is_authenticated:
         form = AtestadosForm(request.POST, request.FILES or None)
         if form.is_valid():
@@ -99,6 +103,16 @@ def create(request):
     else:
         messages.error(request, 'Usuário não conectado!')
         return redirect('entrar')
+=======
+    form = AtestadosForm(request.POST, request.FILES or None)
+    if form.is_valid():
+        messages.success(request, 'Operação realizada com sucesso!')
+        form.save()
+        return redirect('form')
+    else:
+        messages.error(request, 'Operação não pôde ser realizada! Por favor, verifique se o número do documento informado já existe na base de dados.')
+        return redirect('form')
+>>>>>>> invalid-value-message
 
 # Função para visualizar detalhes de atestados cadastrados
 def view(request, pk):
