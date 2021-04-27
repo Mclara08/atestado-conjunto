@@ -1,0 +1,27 @@
+insert into atestados_empresa (nome, cnpj) values ('Qintess', '415318131654');
+insert into atestados_empresa (nome, cnpj) values ('Cimcorp', '551635168845');
+insert into atestados_empresa (nome, cnpj) values ('Resource IT', '32156418545');
+
+select * from atestados_empresa;
+
+insert into atestados_cliente (nome, cnpj) values ('ANA - Agência Nacional de Águas', '65625454699');
+insert into atestados_cliente (nome, cnpj) values ('Caixa', '5326516845');
+insert into atestados_cliente (nome, cnpj) values ('SPC Serasa', '1251351238');
+insert into atestados_cliente (nome, cnpj) values ('Banco Itaú', '87851313514');
+insert into atestados_cliente (nome, cnpj) values ('Banco Santander', '62931863233');
+insert into atestados_cliente (nome, cnpj) values ('Banco Bradesco', '1251351238');
+
+select * from atestados_cliente;
+
+INSERT INTO atestados_atestado (`data`,`servico`,`cliente_id`,`empresa_id`) VALUES ("2020-04-15","Service Desk","3","2"),("2020-04-15","RH","3","3"),("2020-04-15","Service Desk","6","3"),("2020-04-15","Service Desk","5","2"),("2020-04-15","RH","2","2"),("2020-04-15","Service Desk","5","1"),("2020-04-15","Suporte","6","1"),("2020-04-15","Suporte","3","1"),("2020-04-15","Programação","1","3"),("2020-04-15","Service Desk","5","3");
+INSERT INTO atestados_atestado (`data`,`servico`,`cliente_id`,`empresa_id`) VALUES ("2020-04-15","RH","5","2"),("2020-04-15","RH","5","3"),("2020-04-15","Service Desk","6","3"),("2020-04-15","Suporte","5","2"),("2020-04-15","Programação","5","2"),("2020-04-15","RH","5","3"),("2020-04-15","Programação","4","2"),("2020-04-15","RH","2","3"),("2020-04-15","RH","1","2"),("2020-04-15","Programação","3","1");
+INSERT INTO atestados_atestado (`data`,`servico`,`cliente_id`,`empresa_id`) VALUES ("2020-04-15","Programação","1","3"),("2020-04-15","Suporte","6","2"),("2020-04-15","Suporte","1","2"),("2020-04-15","RH","5","2"),("2020-04-15","Suporte","4","3"),("2020-04-15","Suporte","1","1"),("2020-04-15","Service Desk","6","3"),("2020-04-15","Service Desk","2","2"),("2020-04-15","Programação","3","1"),("2020-04-15","Suporte","6","2");
+INSERT INTO atestados_atestado (`data`,`servico`,`cliente_id`,`empresa_id`) VALUES ("2020-04-15","RH","1","1"),("2020-04-15","Suporte","3","1"),("2020-04-15","Service Desk","2","3"),("2020-04-15","Service Desk","1","1"),("2020-04-15","Suporte","6","2"),("2020-04-15","Suporte","5","1"),("2020-04-15","Service Desk","2","2"),("2020-04-15","Programação","3","1"),("2020-04-15","Programação","4","2"),("2020-04-15","Suporte","3","1");
+INSERT INTO atestados_atestado (`data`,`servico`,`cliente_id`,`empresa_id`) VALUES ("2020-04-15","Programação","1","3"),("2020-04-15","Suporte","3","2"),("2020-04-15","Suporte","4","2"),("2020-04-15","RH","6","1"),("2020-04-15","Service Desk","4","3"),("2020-04-15","Suporte","6","3"),("2020-04-15","RH","4","3"),("2020-04-15","Service Desk","6","3"),("2020-04-15","Service Desk","5","3"),("2020-04-15","Service Desk","6","3");
+INSERT INTO atestados_atestado (`data`,`servico`,`cliente_id`,`empresa_id`) VALUES ("2020-04-15","RH","3","3"),("2020-04-15","Service Desk","4","2"),("2020-04-15","Suporte","4","3"),("2020-04-15","Service Desk","3","3"),("2020-04-15","Programação","5","3"),("2020-04-15","Service Desk","5","1"),("2020-04-15","Suporte","4","3"),("2020-04-15","Service Desk","2","2"),("2020-04-15","Programação","4","2"),("2020-04-15","RH","1","3");
+INSERT INTO atestados_atestado (`data`,`servico`,`cliente_id`,`empresa_id`) VALUES ("2020-04-15","RH","3","1"),("2020-04-15","Suporte","2","2"),("2020-04-15","Programação","1","1"),("2020-04-15","RH","6","2"),("2020-04-15","Programação","2","1"),("2020-04-15","Service Desk","1","1"),("2020-04-15","Suporte","2","1"),("2020-04-15","Programação","3","2"),("2020-04-15","Suporte","1","2"),("2020-04-15","Service Desk","4","3");
+INSERT INTO atestados_atestado (`data`,`servico`,`cliente_id`,`empresa_id`) VALUES ("2020-04-15","RH","4","3"),("2020-04-15","Suporte","6","3"),("2020-04-15","Programação","1","1"),("2020-04-15","Service Desk","1","2"),("2020-04-15","RH","6","2"),("2020-04-15","RH","1","3"),("2020-04-15","Suporte","5","1"),("2020-04-15","RH","5","3"),("2020-04-15","Suporte","6","3"),("2020-04-15","Service Desk","3","3");
+INSERT INTO atestados_atestado (`data`,`servico`,`cliente_id`,`empresa_id`) VALUES ("2020-04-15","Suporte","1","2"),("2020-04-15","RH","1","1"),("2020-04-15","RH","3","2"),("2020-04-15","Service Desk","1","3"),("2020-04-15","RH","3","3"),("2020-04-15","Service Desk","3","3"),("2020-04-15","Service Desk","1","3"),("2020-04-15","RH","3","2"),("2020-04-15","Service Desk","4","3"),("2020-04-15","Programação","2","2");
+INSERT INTO atestados_atestado (`data`,`servico`,`cliente_id`,`empresa_id`) VALUES ("2020-04-15","Service Desk","5","2"),("2020-04-15","Programação","4","3"),("2020-04-15","Suporte","2","2"),("2020-04-15","Programação","6","1"),("2020-04-15","Service Desk","1","2"),("2020-04-15","Programação","4","1"),("2020-04-15","RH","5","2"),("2020-04-15","Service Desk","2","2"),("2020-04-15","RH","3","2"),("2020-04-15","Service Desk","6","2");
+
+select * from atestados_atestado;
