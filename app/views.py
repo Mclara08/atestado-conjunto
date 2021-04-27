@@ -35,9 +35,12 @@ def sair(request):
 #home = referente ao index
 @login_required(login_url='/login/')
 def home(request):
-    data = {}
-    data['db'] = Atestados.objects.all()
-    return render(request, 'index.html', data)
+    if request.user is not None:
+        data = {}
+        data['db'] = Atestados.objects.all()
+        return render(request, 'index.html', data)
+    else:
+        return redirect('/login')
 
 #pesquisa = referente à página de pesquisa
 def pesquisa(request):
