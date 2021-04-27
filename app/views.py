@@ -25,7 +25,7 @@ def submit(request):
             return render(request, 'index.html')
         else:
             messages.error(request, 'Usuário e senha não coincidem')
-            return render(request, 'login.html')
+            return redirect('entrar')
 
 def sair(request):
     logout(request)
