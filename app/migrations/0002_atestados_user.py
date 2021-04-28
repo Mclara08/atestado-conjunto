@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='atestados',
             name='user',
-            field=models.ForeignKey(default=4, on_delete=django.db.models.deletion.CASCADE, to='auth.user'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auth.user'),
             preserve_default=False,
         ),
     ]

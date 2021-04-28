@@ -94,8 +94,12 @@ def create(request):
     if request.user.is_authenticated:
         form = AtestadosForm(request.POST, request.FILES or None)
         if form.is_valid():
+            messages.success(request, 'Operação realizada com sucesso!')
             form.save()
-            return redirect('home')
+            return redirect('form')
+        else:
+            messages.error(request, 'Operação não pôde ser realizada! Por favor, verifique se o número do documento informado já existe na base de dados.')
+            return redirect('form')
     else:
         messages.error(request, 'Usuário não conectado!')
         return redirect('entrar')
@@ -114,7 +118,7 @@ def view(request, pk):
 def searchall(request):
     if request.user.is_authenticated:
         dados = {}
-        dados['db'] = Atestados.objects.all()
+        dados['db'] = Atestados.objects.filter(user=request.user)
         return render(request, 'pesquisa.html', dados)
     else:
         messages.error(request, 'Usuário não conectado!')
