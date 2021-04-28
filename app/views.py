@@ -49,7 +49,7 @@ def pesquisa(request):
         busca_data_emissao1 = request.GET.get('busca_data_emissao1')
         busca_data_emissao2 = request.GET.get('busca_data_emissao2')
         busca_empresa = request.GET.get('busca_empresa')
-        lista_pesquisa = (Q(id__gt=0) & Q(user=request.user))
+        lista_pesquisa = Q(id__gt=0)
 
         if busca_numero:
             lista_pesquisa.add(Q(numero_documento=busca_numero), Q.AND)
