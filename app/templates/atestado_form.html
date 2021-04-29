@@ -35,9 +35,9 @@
         {% if messages %}
             {% for message in messages %}
                 {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                <div class="alert alert-danger text-center">{{ message }}</div>
-            {% else %}
-                <div class="alert alert-success text-center">{{ message }}</div>
+                    <div class="alert alert-danger text-center">{{ message }}</div>
+                {% else %}
+                    <div class="alert alert-success text-center">{{ message }}</div>
                 {% endif %}
             {% endfor %}
         {% endif %}

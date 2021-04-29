@@ -22,7 +22,7 @@ def submit(request):
             return render(request, 'index.html')
         else:
             messages.error(request, 'Usuário e senha não coincidem')
-            return render(request, 'login.html')
+            return redirect('entrar')
 
 def sair(request):
     logout(request)
@@ -119,7 +119,7 @@ def view(request, pk):
 def searchall(request):
     if request.user.is_authenticated:
         dados = {}
-        dados['db'] = Atestados.objects.all()
+        dados['db'] = Atestados.objects.filter(user=request.user)
         return render(request, 'pesquisa.html', dados)
     else:
         messages.error(request, 'Usuário não conectado!')
