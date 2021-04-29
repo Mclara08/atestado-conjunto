@@ -12,19 +12,7 @@
 <body>
 
 <!--Barra de navegação-->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">Entrega de Atestados</a>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="/form">Cadastrar <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/pesquisa">Pesquisar <span class="sr-only">(current)</span></a>
-            </li>
-        </ul>
-    </div>
-</nav>
+{%include "model-nav.html"%}
 
 <!--Título-->
 <div class="col-8 m-auto pt-3 pb-2 text-center">
@@ -67,11 +55,10 @@
             </div>
             {%if db%}
                 <a href="/pesquisa/" class="btn btn-primary">Voltar</a>
-                <a href="/edit/{{db.id}}" class="btn btn-warning">Editar</a>
-                <a href="/delete/{{db.id}}" class="btn btn-danger btnDel">Excluir</a>
-            {%else%}
-                <a href="/pesquisa/" class="btn btn-primary">Voltar</a>
-                <a href="/update/{{dados.id}}" type="submit" class="btn btn-success">Salvar</a>
+                {%if db.created_by == request.user%}
+                    <a href="/edit/{{db.id}}" class="btn btn-warning">Editar</a>
+                    <a href="/delete/{{db.id}}" class="btn btn-danger btnDel">Excluir</a>
+                {%endif%}
             {%endif%}
         </form>
     </div>

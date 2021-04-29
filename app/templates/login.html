@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+<!--Título-->
+<div class="col-8 m-auto pt-4 pb-3 text-center">
+    <p class="h1">LOGIN</p>
+</div>
+
+<!--Formulário de login-->
+<div class="container">
+    <form action="/entrar/submit/" method="POST">
+        {%csrf_token%}
+        {%for message in messages%}
+            <div class="alert alert-danger">
+                <strong>Erro!</strong> {{message}}
+            </div>
+        {%endfor%}
+        <div class="form-group">
+            <label for="cpf">CPF</label>
+            <input type="text" class="form-control" id="cpf" name="cpf" placeholder="Insira seu CPF">
+        </div>
+        <div class="form-group">
+            <label for="senha">Password</label>
+            <input type="password" class="form-control" id="senha" name="senha" placeholder="Insira sua senha">
+        </div>
+        <button type="submit" class="btn btn-primary">Entrar</button>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Empresa(models.Model):
@@ -14,7 +15,16 @@ class Cliente(models.Model):
     def __str__(self):
         return self.nome
 
-class Atestados(models.Model):
+NULL_AND_BLANK = {'null':True, 'blank':True}
+
+class BaseModel(models.Model):
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_by', **NULL_AND_BLANK)
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='updated_by', **NULL_AND_BLANK)
+
+    class Meta:
+        abstract = True
+
+class Atestados(BaseModel):
     numero_documento = models.CharField(max_length=30, unique=True)
 
     servico = (('Desenvolvimento', 'Desenvolvimento'),
@@ -28,6 +38,9 @@ class Atestados(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.RESTRICT, null=False, related_name='rel_empresa')
     cliente = models.ForeignKey(Cliente, on_delete=models.RESTRICT, null=False, related_name='rel_cliente')
     documento_pdf = models.FileField(upload_to='atestados/PDFs/')
+
+    # def __str__(self):
+    #     return str(self .id)
 
     def __getnumero__(self):
         self.numero_documento
