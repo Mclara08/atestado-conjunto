@@ -55,7 +55,7 @@
             </div>
             {%if db%}
                 <a href="/pesquisa/" class="btn btn-primary">Voltar</a>
-                {%if db.user == request.user%}
+                {%if db.created_by == request.user%}
                     <a href="/edit/{{db.id}}" class="btn btn-warning">Editar</a>
                     <a href="/delete/{{db.id}}" class="btn btn-danger btnDel">Excluir</a>
                 {%endif%}

@@ -88,15 +88,14 @@ def form(request):
 
 # Função para cadastrar atestados
 def create(request):
-
     if request.user.is_authenticated:
         form = AtestadosForm(request.POST, request.FILES or None)
         if form.is_valid():
-            messages.success(request, 'Operação realizada com sucesso!')
             Atestados.objects.create(numero_documento=form.cleaned_data['numero_documento'], tipo_de_servico=form.cleaned_data['tipo_de_servico'],
                                      data_emissao=form.cleaned_data['data_emissao'], empresa=form.cleaned_data['empresa'],
                                      cliente=form.cleaned_data['cliente'], documento_pdf=form.cleaned_data['documento_pdf'],
                                      created_by=request.user)
+            messages.success(request, 'Operação realizada com sucesso!')
             return redirect('form')
         else:
             messages.error(request, 'Operação não pôde ser realizada! Por favor, verifique se o número do documento informado já existe na base de dados.')
@@ -119,7 +118,7 @@ def view(request, pk):
 def searchall(request):
     if request.user.is_authenticated:
         dados = {}
-        dados['db'] = Atestados.objects.filter(user=request.user)
+        dados['db'] = Atestados.objects.all()
         return render(request, 'pesquisa.html', dados)
     else:
         messages.error(request, 'Usuário não conectado!')
@@ -129,7 +128,7 @@ def searchall(request):
 def edit(request, pk):
     if request.user.is_authenticated:
         dado = Atestados.objects.get(pk=pk)
-        if dado.user == request.user:
+        if dado.created_by == request.user:
             data = {}
             data['db'] = Atestados.objects.get(pk=pk)
             data['form'] = AtestadosForm(instance=data['db'])
@@ -144,16 +143,18 @@ def edit(request, pk):
 # Função para atualizar edições de atestados
 def update(request, pk):
     if request.user.is_authenticated:
-        data = {}
-        data['db'] = Atestados.objects.get(pk=pk)
-        form = AtestadosForm(request.POST, request.FILES or None, instance=data['db'])
-        if form.is_valid():
-            Atestados.objects.filter(pk=pk).update(tipo_de_servico=form.cleaned_data['tipo_de_servico'],
-                                                   empresa=form.cleaned_data['empresa'],
-                                                   cliente=form.cleaned_data['cliente'],
-                                                   documento_pdf=form.cleaned_data['documento_pdf'],
-                                                   updated_by=request.user)
-            return redirect('home')
+        dado = Atestados.objects.get(pk=pk)
+        if dado.created_by == request.user:
+            data = {}
+            data['db'] = Atestados.objects.get(pk=pk)
+            form = AtestadosForm(request.POST, request.FILES or None, instance=data['db'])
+            if form.is_valid():
+                Atestados.objects.filter(pk=pk).update(tipo_de_servico=form.cleaned_data['tipo_de_servico'],
+                                                       empresa=form.cleaned_data['empresa'],
+                                                       cliente=form.cleaned_data['cliente'],
+                                                       documento_pdf=form.cleaned_data['documento_pdf'],
+                                                       updated_by=request.user)
+                return redirect('home')
     else:
         messages.error(request, 'Usuário não conectado!')
         return redirect('entrar')
@@ -162,7 +163,7 @@ def update(request, pk):
 def delete(request, pk):
     if request.user.is_authenticated:
         dado = Atestados.objects.get(pk=pk)
-        if dado.user == request.user:
+        if dado.created_by == request.user:
             db = Atestados.objects.get(pk=pk)
             db.delete()
             return redirect('pesquisa')
