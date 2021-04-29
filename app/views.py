@@ -128,10 +128,15 @@ def searchall(request):
 # Função para tela de edição de atestados
 def edit(request, pk):
     if request.user.is_authenticated:
-        data = {}
-        data['db'] = Atestados.objects.get(pk=pk)
-        data['form'] = AtestadosForm(instance=data['db'])
-        return render(request, 'atestado_form.html', data)
+        dado = Atestados.objects.get(pk=pk)
+        if dado.user == request.user:
+            data = {}
+            data['db'] = Atestados.objects.get(pk=pk)
+            data['form'] = AtestadosForm(instance=data['db'])
+            return render(request, 'atestado_form.html', data)
+        else:
+            messages.error(request, 'O atestado selecionado não pertence ao usuário atual, portanto, este não está autenticado para realizar a ação!')
+            return redirect('pesquisa')
     else:
         messages.error(request, 'Usuário não conectado!')
         return redirect('entrar')
@@ -156,9 +161,14 @@ def update(request, pk):
 # Função para deletar atestados
 def delete(request, pk):
     if request.user.is_authenticated:
-        db = Atestados.objects.get(pk=pk)
-        db.delete()
-        return redirect('pesquisa')
+        dado = Atestados.objects.get(pk=pk)
+        if dado.user == request.user:
+            db = Atestados.objects.get(pk=pk)
+            db.delete()
+            return redirect('pesquisa')
+        else:
+            messages.error(request, 'O atestado selecionado não pertence ao usuário atual, portanto, este não está autenticado para realizar a ação!')
+            return redirect('pesquisa')
     else:
         messages.error(request, 'Usuário não conectado!')
         return redirect('entrar')
