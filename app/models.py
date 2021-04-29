@@ -18,7 +18,8 @@ class Cliente(models.Model):
 NULL_AND_BLANK = {'null':True, 'blank':True}
 
 class BaseModel(models.Model):
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user', **NULL_AND_BLANK)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_by', **NULL_AND_BLANK)
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='updated_by', **NULL_AND_BLANK)
 
     class Meta:
         abstract = True

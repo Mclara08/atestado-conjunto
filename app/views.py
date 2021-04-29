@@ -143,7 +143,11 @@ def update(request, pk):
         data['db'] = Atestados.objects.get(pk=pk)
         form = AtestadosForm(request.POST, request.FILES or None, instance=data['db'])
         if form.is_valid():
-            form.save()
+            Atestados.objects.filter(pk=pk).update(tipo_de_servico=form.cleaned_data['tipo_de_servico'],
+                                                   empresa=form.cleaned_data['empresa'],
+                                                   cliente=form.cleaned_data['cliente'],
+                                                   documento_pdf=form.cleaned_data['documento_pdf'],
+                                                   updated_by=request.user)
             return redirect('home')
     else:
         messages.error(request, 'Usuário não conectado!')
