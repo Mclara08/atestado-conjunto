@@ -15,7 +15,15 @@ class Cliente(models.Model):
     def __str__(self):
         return self.nome
 
-class Atestados(models.Model):
+NULL_AND_BLANK = {'null':True, 'blank':True}
+
+class BaseModel(models.Model):
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user', **NULL_AND_BLANK)
+
+    class Meta:
+        abstract = True
+
+class Atestados(BaseModel):
     numero_documento = models.CharField(max_length=30, unique=True)
 
     servico = (('Desenvolvimento', 'Desenvolvimento'),
@@ -29,7 +37,6 @@ class Atestados(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.RESTRICT, null=False, related_name='rel_empresa')
     cliente = models.ForeignKey(Cliente, on_delete=models.RESTRICT, null=False, related_name='rel_cliente')
     documento_pdf = models.FileField(upload_to='atestados/PDFs/')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     # def __str__(self):
     #     return str(self .id)

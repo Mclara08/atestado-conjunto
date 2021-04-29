@@ -93,7 +93,10 @@ def create(request):
         form = AtestadosForm(request.POST, request.FILES or None)
         if form.is_valid():
             messages.success(request, 'Operação realizada com sucesso!')
-            form.save()
+            Atestados.objects.create(numero_documento=form.cleaned_data['numero_documento'], tipo_de_servico=form.cleaned_data['tipo_de_servico'],
+                                     data_emissao=form.cleaned_data['data_emissao'], empresa=form.cleaned_data['empresa'],
+                                     cliente=form.cleaned_data['cliente'], documento_pdf=form.cleaned_data['documento_pdf'],
+                                     created_by=request.user)
             return redirect('form')
         else:
             messages.error(request, 'Operação não pôde ser realizada! Por favor, verifique se o número do documento informado já existe na base de dados.')

@@ -5,5 +5,5 @@ from django import forms
 class AtestadosForm(ModelForm):
     class Meta:
         model = Atestados
-        fields = ['numero_documento', 'tipo_de_servico', 'data_emissao', 'empresa', 'cliente', 'documento_pdf', 'user']
+        fields = ['numero_documento', 'tipo_de_servico', 'data_emissao', 'empresa', 'cliente', 'documento_pdf']
 
