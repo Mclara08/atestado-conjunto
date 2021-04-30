@@ -1,6 +1,11 @@
+import PyPDF2
+import textract
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from nltk import word_tokenize
+from nltk.corpus import stopwords
+
 from app.forms import *
 from app.models import Atestados
 from django.contrib.auth import authenticate, login, logout
@@ -49,6 +54,7 @@ def pesquisa(request):
         busca_data_emissao1 = request.GET.get('busca_data_emissao1')
         busca_data_emissao2 = request.GET.get('busca_data_emissao2')
         busca_empresa = request.GET.get('busca_empresa')
+        busca_palavras = request.GET.get('busca_palavras')
         lista_pesquisa = Q(id__gt=0)
 
         if busca_numero:
@@ -66,6 +72,39 @@ def pesquisa(request):
                 lista_pesquisa.add(Q(data_emissao=busca_data_emissao2), Q.AND)
         if busca_empresa:
             lista_pesquisa.add(Q(empresa=busca_empresa), Q.AND)
+        if busca_palavras:
+            palavras = busca_palavras
+            obj = Atestados.objects.all()
+            for item in obj:
+                arquivo = item.documento_pdf
+                caminho = 'media/' + str(arquivo)
+                abertura = open(caminho, 'rb')
+                leitura = PyPDF2.PdfFileReader(abertura)
+
+                numero_pag = leitura.numPages
+                conta = 0
+                texto = ""
+
+                while conta < numero_pag:
+                    pags = leitura.getPage(conta)
+                    conta += 1
+                    texto += pags.extractText()
+
+                if texto != "":
+                    texto = texto
+                else:
+                    texto = textract.process(caminho, method='tesseract', language='en')
+
+                separador = word_tokenize(texto)
+                pont = ['(', ')', ',', ';', '[', ']', ':']
+
+                palavra = stopwords.words('portuguese')
+
+                chaves = [word for word in separador if not word in palavra and not word in pont]
+
+                for itemchave in chaves:
+                    if itemchave == palavras:
+                        lista_pesquisa.add(Q(documento_pdf=item.documento_pdf), Q.AND)
 
         if lista_pesquisa == []:
             data['db'] = Atestados.objects.all()
