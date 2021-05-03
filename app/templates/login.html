@@ -7,28 +7,31 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    {%load static%}
+    <link rel="stylesheet" href="{%static 'css/css-page.css'%}">
 </head>
 <body>
+
 <!--Título-->
 <div class="col-8 m-auto pt-4 pb-3 text-center">
     <p class="h1">LOGIN</p>
 </div>
 
 <!--Formulário de login-->
-<div class="container">
+<div class="container" id="container-login">
     <form action="/entrar/submit/" method="POST">
         {%csrf_token%}
         {%for message in messages%}
-            <div class="alert alert-danger">
-                <strong>Erro!</strong> {{message}}
-            </div>
+        <div class="alert alert-danger" role="alert">
+            <strong>Erro!</strong> {{message}}
+        </div>
         {%endfor%}
-        <div class="form-group">
+        <div class="form-group col-md-12">
             <label for="cpf">CPF</label>
             <input type="text" class="form-control" id="cpf" name="cpf" placeholder="Insira seu CPF">
         </div>
-        <div class="form-group">
-            <label for="senha">Password</label>
+        <div class="form-group col-md-12">
+            <label for="senha">Senha</label>
             <input type="password" class="form-control" id="senha" name="senha" placeholder="Insira sua senha">
         </div>
         <button type="submit" class="btn btn-primary">Entrar</button>

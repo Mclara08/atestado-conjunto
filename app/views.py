@@ -1,10 +1,6 @@
-import PyPDF2
-import textract
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from nltk import word_tokenize
-from nltk.corpus import stopwords
 
 from app.forms import *
 from app.models import Atestados
@@ -26,7 +22,7 @@ def submit(request):
             login(request, user)
             return render(request, 'index.html')
         else:
-            messages.error(request, 'Usuário e senha não coincidem')
+            messages.error(request, 'Usuário e/ou senha não existem')
             return redirect('entrar')
 
 def sair(request):
