@@ -6,6 +6,7 @@ from app.models import Atestados
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_protect
+from django.core.paginator import Paginator
 
 # Create your views here.
 def entrar(request):
@@ -68,10 +69,16 @@ def pesquisa(request):
             lista_pesquisa.add(Q(empresa=busca_empresa), Q.AND)
 
         if lista_pesquisa == []:
-            data['db'] = Atestados.objects.all()
+            todos = Atestados.objects.all()
+            paginator = Paginator(todos, 5)
+            pages = request.GET.get('page')
+            data['db'] = paginator.get_page(pages)
             return render(request, 'pesquisa.html', data)
         else:
-            data['db'] = Atestados.objects.filter(lista_pesquisa)
+            lista = Atestados.objects.filter(lista_pesquisa)
+            paginator = Paginator(lista,5)
+            pages = request.GET.get('page')
+            data['db'] = paginator.get_page(pages)
             return render(request, 'pesquisa.html', data)
     else:
         messages.error(request, 'Usuário não conectado!')
@@ -117,9 +124,12 @@ def view(request, pk):
 #searchall = pesquisa todos os campos
 def searchall(request):
     if request.user.is_authenticated:
-        dados = {}
-        dados['db'] = Atestados.objects.all()
-        return render(request, 'pesquisa.html', dados)
+        data = {}
+        todos = Atestados.objects.all()
+        paginator = Paginator(todos, 5)
+        pages = request.GET.get('page')
+        data['db'] = paginator.get_page(pages)
+        return render(request, 'pesquisa.html', data)
     else:
         messages.error(request, 'Usuário não conectado!')
         return redirect('entrar')
@@ -134,7 +144,7 @@ def edit(request, pk):
             data['form'] = AtestadosForm(instance=data['db'])
             return render(request, 'atestado_form.html', data)
         else:
-            messages.error(request, 'O atestado selecionado não pertence ao usuário atual, portanto, este não está autenticado para realizar a ação!')
+            messages.error(request, 'O atestado selecionado não pertence ao usuário atual, portanto, não está autenticado para realizar a ação!')
             return redirect('pesquisa')
     else:
         messages.error(request, 'Usuário não conectado!')
