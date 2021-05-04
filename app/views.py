@@ -68,17 +68,12 @@ def pesquisa(request):
         if busca_empresa:
             lista_pesquisa.add(Q(empresa=busca_empresa), Q.AND)
 
-        if lista_pesquisa == []:
-            todos = Atestados.objects.all()
-            paginator = Paginator(todos, 5)
-            pages = request.GET.get('page')
-            data['db'] = paginator.get_page(pages)
-            return render(request, 'pesquisa.html', data)
-        else:
+        if lista_pesquisa != []:
             lista = Atestados.objects.filter(lista_pesquisa)
-            paginator = Paginator(lista,5)
-            pages = request.GET.get('page')
-            data['db'] = paginator.get_page(pages)
+            data['db'] = lista
+            paginator = Paginator(lista, 5)
+            num_pag = request.GET.get('page')
+            data['paginas'] = paginator.get_page(num_pag)
             return render(request, 'pesquisa.html', data)
     else:
         messages.error(request, 'Usuário não conectado!')

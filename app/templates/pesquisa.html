@@ -11,6 +11,8 @@
 </head>
 <body>
 
+    {%load app_extras%}
+
 <!--Barra de navegação-->
 {%include "model-nav.html"%}
 
@@ -21,9 +23,8 @@
 
 <div class="row m-auto">
     <!--Formulário de pesquisa-->
-    <div class="cocntainer-fluid col-4">
+    <div class="jumbotron col-md-4 col-sm-12 col-12">
         <form name="formpesquisa" id="form-pesquisa" method="GET" action="/pesquisa/">
-            {%csrf_token%}
             <div class="form-group">
                 <label>Número de identificação: </label>
                 <input type="text" name="busca_numero" id="busca_numero" class="form-control">
@@ -64,7 +65,7 @@
             <a href="/pesquisa/searchall/" type="submit" class="btn btn-primary">Mostrar tudo</a>
         </form>
     </div>
-    <div class="container-fluid col-8">
+    <div class="container-fluid col-md-8 col-sm-12 col-12">
         {% if messages %}
         {% for message in messages %}
         {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
@@ -87,8 +88,8 @@
             </tr>
             </thead>
             <tbody>
-            {%if db%}
-            {%for linhas in db%}
+            {%if paginas%}
+            {%for linhas in paginas%}
             <tr>
                 <th scope="row">{{linhas.numero_documento}}</th>
                 <td>{{linhas.cliente}}</td>
@@ -109,21 +110,23 @@
             {%endif%}
             </tbody>
         </table>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-end">
-                <li class="page-item">
-                    {%if db.has_previous%}
-                    <a href="?page={{db.previous_page_number}}" class="page-link"> Anterior </a>
-                    {%endif%}
-                </li>
-                <li class="page-item"><a class="page-link">{{db.number}}</a></li>
-                <li class="page-item">
-                    {%if db.has_next%}
-                    <a href="?page={{db.next_page_number}}" class="page-link"> Próximo </a>
-                    {%endif%}
-                </li>
-            </ul>
-        </nav>
+        {%if paginas.has_other_pages%}
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    <li class="page-item">
+                        {%if paginas.has_previous%}
+                        <a href="{% minha_url paginas.previous_page_number 'page' request.GET.urlencode %}" class="page-link"> Anterior </a>
+                        {%endif%}
+                    </li>
+                    <li class="page-item"><a class="page-link">{{paginas.number}}</a></li>
+                    <li class="page-item">
+                        {%if paginas.has_next%}
+                        <a href="{%minha_url paginas.next_page_number 'page' request.GET.urlencode %}" class="page-link"> Próximo </a>
+                        {%endif%}
+                    </li>
+                </ul>
+            </nav>
+        {%endif%}
     </div>
 </div>
 <script src="{%static 'javascript.js'%}"></script>
