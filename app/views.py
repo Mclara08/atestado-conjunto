@@ -70,8 +70,7 @@ def pesquisa(request):
 
         if lista_pesquisa != []:
             lista = Atestados.objects.filter(lista_pesquisa)
-            data['db'] = lista
-            paginator = Paginator(lista, 5)
+            paginator = Paginator(lista, 6)
             num_pag = request.GET.get('page')
             data['paginas'] = paginator.get_page(num_pag)
             return render(request, 'pesquisa.html', data)
@@ -121,9 +120,9 @@ def searchall(request):
     if request.user.is_authenticated:
         data = {}
         todos = Atestados.objects.all()
-        paginator = Paginator(todos, 5)
+        paginator = Paginator(todos, 6)
         pages = request.GET.get('page')
-        data['db'] = paginator.get_page(pages)
+        data['paginas'] = paginator.get_page(pages)
         return render(request, 'pesquisa.html', data)
     else:
         messages.error(request, 'Usuário não conectado!')

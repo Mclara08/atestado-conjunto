@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="{%static 'css/css-paginas.css'%}">
 </head>
 <body>
-
-    {%load app_extras%}
+<!--Carrega a paginação da pesquisa-->
+{%load app_extras%}
 
 <!--Barra de navegação-->
 {%include "model-nav.html"%}
@@ -25,6 +25,7 @@
     <!--Formulário de pesquisa-->
     <div class="jumbotron col-md-4 col-sm-12 col-12">
         <form name="formpesquisa" id="form-pesquisa" method="GET" action="/pesquisa/">
+            {%csrf_token%}
             <div class="form-group">
                 <label>Número de identificação: </label>
                 <input type="text" name="busca_numero" id="busca_numero" class="form-control">
@@ -61,11 +62,13 @@
                     <option value="3">Cimcorp</option>
                 </select>
             </div>
-            <input type="submit" class="btn btn-success ml-3" name="submit" value="Pesquisar">
+            <input type="submit" class="btn btn-success" name="submit" value="Pesquisar">
             <a href="/pesquisa/searchall/" type="submit" class="btn btn-primary">Mostrar tudo</a>
         </form>
     </div>
+    <div class="clearfix visible-sm-block"></div>
     <div class="container-fluid col-md-8 col-sm-12 col-12">
+        <!--Exibe mensagem de erro-->
         {% if messages %}
         {% for message in messages %}
         {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
@@ -75,6 +78,8 @@
         {% endif %}
         {% endfor %}
         {% endif %}
+
+        <!--Tabela de atestados-->
         <table class="table border">
             <thead class="thead-dark text-center">
             <tr>
@@ -110,22 +115,23 @@
             {%endif%}
             </tbody>
         </table>
+        <!--Paginação-->
         {%if paginas.has_other_pages%}
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-end">
-                    <li class="page-item">
-                        {%if paginas.has_previous%}
-                        <a href="{% minha_url paginas.previous_page_number 'page' request.GET.urlencode %}" class="page-link"> Anterior </a>
-                        {%endif%}
-                    </li>
-                    <li class="page-item"><a class="page-link">{{paginas.number}}</a></li>
-                    <li class="page-item">
-                        {%if paginas.has_next%}
-                        <a href="{%minha_url paginas.next_page_number 'page' request.GET.urlencode %}" class="page-link"> Próximo </a>
-                        {%endif%}
-                    </li>
-                </ul>
-            </nav>
+        <nav>
+            <ul class="pagination justify-content-end">
+                <li class="page-item">
+                    {%if paginas.has_previous%}
+                    <a href="{% minha_url paginas.previous_page_number 'page' request.GET.urlencode %}" class="page-link"> Anterior </a>
+                    {%endif%}
+                </li>
+                <li class="page-item"><a class="page-link">{{paginas.number}}</a></li>
+                <li class="page-item">
+                    {%if paginas.has_next%}
+                    <a href="{%minha_url paginas.next_page_number 'page' request.GET.urlencode %}" class="page-link"> Próximo </a>
+                    {%endif%}
+                </li>
+            </ul>
+        </nav>
         {%endif%}
     </div>
 </div>
