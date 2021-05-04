@@ -6,11 +6,10 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Atestados</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 </head>
 
 <body>
-
 <!--Barra de navegação-->
 {%include "model-nav.html"%}
 
@@ -21,35 +20,35 @@
 
 <!--Container do formulário de visualização-->
  <div class="container">
-    <div class="col-12 m-auto pt-2 pb-2">
+    <div class="jumbotron col-sm-9 m-auto pt-2 pb-2">
         <form name="form" id="form" action="/view/{{db.id}}" method="post">
             <div class="form-group row">
-                <label for="numestatico" class="col-3 col-form-label">Número do documento: </label>
-                <div class="col-sm-6 border">
+                <label for="numestatico" class="col-sm-5">Número do documento: </label>
+                <div class="col-sm-6 border bg-light">
                     <input type="text" readonly class="form-control-plaintext" id="numestatico" value="{{db.numero_documento}}">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="cnpjestatico" class="col-3 col-form-label">Cliente: </label>
-                <div class="col-sm-6 border">
+                <label for="cnpjestatico" class="col-sm-5">Cliente: </label>
+                <div class="col-sm-6 border bg-light">
                     <input type="text" readonly class="form-control-plaintext" id="cnpjestatico" value="{{db.cliente.nome}}">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="dataestatico" class="col-3 col-form-label">Data de emissão: </label>
-                <div class="col-sm-6 border">
+                <label for="dataestatico" class="col-sm-5">Data de emissão: </label>
+                <div class="col-sm-6 border bg-light">
                     <input type="text" readonly class="form-control-plaintext" id="dataestatico" value="{{db.data_emissao}}">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="servicoestatico" class="col-sm-3 col-form-label">Tipo de serviço: </label>
-                <div class="col-sm-6 border">
+                <label for="servicoestatico" class="col-sm-5">Tipo de serviço: </label>
+                <div class="col-sm-6 border bg-light">
                     <input type="text" readonly class="form-control-plaintext" id="servicoestatico" value="{{db.tipo_de_servico}}">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="empresaestatico" class="col-sm-3 col-form-label">Empresa: </label>
-                <div class="col-sm-6 border">
+                <label for="empresaestatico" class="col-sm-5">Empresa: </label>
+                <div class="col-sm-6 border bg-light">
                     <input type="text" readonly class="form-control-plaintext" id="empresaestatico" value="{{db.empresa.nome}}">
                 </div>
             </div>
