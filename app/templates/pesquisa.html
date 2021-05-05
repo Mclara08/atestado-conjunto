@@ -78,43 +78,44 @@
         {% endif %}
         {% endfor %}
         {% endif %}
-
-        <!--Tabela de atestados-->
-        <table class="table border">
-            <thead class="thead-dark text-center">
-            <tr>
-                <th scope="col">Número de atestado</th>
-                <th scope="col">Cliente</th>
-                <th scope="col">Data de emissão</th>
-                <th scope="col">Tipo de serviço</th>
-                <th scope="col">Empresa</th>
-                <th scope="col">Arquivo</th>
-                <th scope="col">Ações</th>
-            </tr>
-            </thead>
-            <tbody>
-            {%if paginas%}
-            {%for linhas in paginas%}
-            <tr>
-                <th scope="row">{{linhas.numero_documento}}</th>
-                <td>{{linhas.cliente}}</td>
-                <td>{{linhas.data_emissao}}</td>
-                <td>{{linhas.tipo_de_servico}}</td>
-                <td>{{linhas.empresa}}</td>
-                <td><a href="{{linhas.documento_pdf.url}}" class="btn btn-primary btn-sm" target="_blank">Download PDF</a></td>
-                <td>
-                    <a href="/pesquisa/view/{{linhas.id}}/" class="btn btn-link">Visualizar campo</a>
-                </td>
-            </tr>
-            {%empty%}
-            <tr>
-                <th scope="row">
-                <td>Não contém nenhum registro</td>
-            </tr>
-            {%endfor%}
-            {%endif%}
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <!--Tabela de atestados-->
+            <table class="table border col-12">
+                <thead class="thead-dark text-center">
+                <tr>
+                    <th scope="col">Número de atestado</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Data de emissão</th>
+                    <th scope="col">Tipo de serviço</th>
+                    <th scope="col">Empresa</th>
+                    <th scope="col">Arquivo</th>
+                    <th scope="col">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                {%if paginas%}
+                {%for linhas in paginas%}
+                <tr>
+                    <th scope="row">{{linhas.numero_documento}}</th>
+                    <td>{{linhas.cliente}}</td>
+                    <td>{{linhas.data_emissao}}</td>
+                    <td>{{linhas.tipo_de_servico}}</td>
+                    <td>{{linhas.empresa}}</td>
+                    <td><a href="{{linhas.documento_pdf.url}}" class="btn btn-primary btn-sm" target="_blank">Download PDF</a></td>
+                    <td>
+                        <a href="/pesquisa/view/{{linhas.id}}/" class="btn btn-link">Visualizar campo</a>
+                    </td>
+                </tr>
+                {%empty%}
+                <tr>
+                    <th scope="row">
+                    <td>Não contém nenhum registro</td>
+                </tr>
+                {%endfor%}
+                {%endif%}
+                </tbody>
+            </table>
+        </div>
         <!--Paginação-->
         {%if paginas.has_other_pages%}
         <nav>
