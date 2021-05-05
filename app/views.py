@@ -20,7 +20,7 @@ def submit(request):
         user = authenticate(username=usuario, password=senha)
         if user is not None:
             login(request, user)
-            return render(request, 'index.html')
+            return redirect('home')
         else:
             messages.error(request, 'Usuário e senha não coincidem')
             return redirect('entrar')
@@ -30,15 +30,15 @@ def sair(request):
     return redirect('/entrar')
 
 #home = referente ao index
-@login_required(login_url='/entrar/')
+@login_required(login_url='/entrar')
 def home(request):
     if request.user.is_authenticated:
         data = {}
         data['db'] = Atestados.objects.all()
-        return render(request, 'index.html', data)
+        return render(request, 'pesquisa.html', data)
     else:
         messages.error(request, 'Usuário não conectado!')
-        return redirect('entrar')
+        return redirect('login.html')
 
 #pesquisa = referente à página de pesquisa
 def pesquisa(request):
@@ -158,7 +158,7 @@ def update(request, pk):
                                                        cliente=form.cleaned_data['cliente'],
                                                        documento_pdf=form.cleaned_data['documento_pdf'],
                                                        updated_by=request.user)
-                return redirect('home')
+                return redirect('pesquisa')
     else:
         messages.error(request, 'Usuário não conectado!')
         return redirect('entrar')

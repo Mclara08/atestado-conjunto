@@ -1,49 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
+{% load static %}
 {% load crispy_forms_tags %}
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cadastrar</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-</head>
-
-<body>
 <!--Barra de navegação-->
 {%include "model-nav.html"%}
 
-<div class="col-8 m-auto pt-2 pb-2 text-center">
-    <h1>Cadastro</h1>
-</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cadastrar</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
 
-<div class="col-8 m-auto pt-2 pb-2 text-center">
-    <a href="/" class="btn btn-secondary">Voltar</a>
-</div>
+<body>
+    <div class="col-8 m-auto pt-2 pb-2 text-center">
+        <h1>Cadastro</h1>
+    </div>
 
-<!-- Formulário cadastro/atualização de atestados -->
-<div class="col-5 m-auto pt-2 pb-2">
-    <div id="result"></div>
-    <form name="form" id="form" action="{% if db %}/update/{{db.id}}/{% else %}/create/{% endif %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <div class="text-center">
-            <input type="submit" class="btn btn-success">
-        </div><br>
-        {% if messages %}
-            {% for message in messages %}
-                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                    <div class="alert alert-danger text-center">{{ message }}</div>
-                {% else %}
-                    <div class="alert alert-success text-center">{{ message }}</div>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-    </form>
-</div>
-{% load static %}
-<script src="{% static 'javascript.js' %}"></script>
+    <div class="col-8 m-auto pt-2 pb-2 text-center">
+        <a href="/pesquisa" class="btn btn-secondary">Voltar</a>
+    </div>
+
+    <!-- Formulário cadastro/atualização de atestados -->
+    <main role="main" class="container">
+        <div class="jumbotron col-9 m-auto pt-2 pb-2">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="alert alert-danger text-center">{{ message }}</div>
+                    {% else %}
+                        <div class="alert alert-success text-center">{{ message }}</div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            <div id="result"></div>
+                <form name="form" id="form" action="{% if db %}/update/{{db.id}}/{% else %}/create/{% endif %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="text-center">
+                        <input type="submit" class="btn btn-success">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 </body>
 </html>
