@@ -6,116 +6,136 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Pesquisa</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    {%load static%}
+    <link rel="stylesheet" href="{%static 'css/css-paginas.css'%}">
 </head>
 <body>
+<!--Carrega a paginação da pesquisa-->
+{%load app_extras%}
 
 <!--Barra de navegação-->
 {%include "model-nav.html"%}
 
 <!--Título-->
-<div class="col-8 m-auto pt-4 pb-3 text-center">
+<div class="col-12 pt-4">
     <p class="h1">PESQUISA</p>
 </div>
 
-<!--Formulário de pesquisa-->
-<div class="container">
-    <div class="col-sm-12">
-        <form name="formpesquisa" id="formpesquisa" method="GET" action="/pesquisa/">
+<div class="row m-auto">
+    <!--Formulário de pesquisa-->
+    <div class="jumbotron col-md-4 col-sm-12 col-12">
+        <form name="formpesquisa" id="form-pesquisa" method="GET" action="/pesquisa/">
             {%csrf_token%}
+            <div class="form-group">
+                <label>Número de identificação: </label>
+                <input type="text" name="busca_numero" id="busca_numero" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Tipo de serviço: </label>
+                <input type="text" name="busca_servico" id="busca_servico" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Cliente: </label>
+                <select name="busca_cliente" id="busca_cliente" class="form-control">
+                    <option></option>
+                    <option value="1">Banco do Brasil</option>
+                    <option value="2">ANA - Agência Nacional de Águas</option>
+                    <option value="3">Caixa Econômica Federal</option>
+                </select>
+            </div>
             <div class="row">
-                <div class="form-group col-4">
-                    <label>Número de identificação: </label>
-                    <input type="text" name="busca_numero" id="busca_numero" class="form-control">
-                </div>
-                <div class="form-group col-4">
-                    <label>Tipo de serviço: </label>
-                    <input type="text" name="busca_servico" id="busca_servico" class="form-control">
-                </div>
-                <div class="form-group col-4">
-                    <label>Cliente: </label>
-                    <select name="busca_cliente" id="busca_cliente" class="form-control">
-                        <option></option>
-                        <option value="1">Banco do Brasil</option>
-                        <option value="2">ANA - Agência Nacional de Águas</option>
-                        <option value="3">Caixa Econômica Federal</option>
-                    </select>
-                </div>
-                <div class="form-group col-4">
+                <div class="form-group col-6">
                     <label>Data inicial: </label>
                     <input type="date" name="busca_data_emissao1" id="busca_data1" class="form-control">
                 </div>
-                <div class="form-group col-4">
+                <div class="form-group col-6">
                     <label>Data final: </label>
                     <input type="date" name="busca_data_emissao2" id="busca_data2" class="form-control">
                 </div>
-                <div class="form-group col-4">
-                    <label>Empresa</label>
-                    <select name="busca_empresa" id="busca_empresa" class="form-control">
-                        <option></option>
-                        <option value="1">Qintess</option>
-                        <option value="2">Resource IT</option>
-                        <option value="3">Cimcorp</option>
-                    </select>
-                </div>
             </div>
-            <input type="submit" class="btn btn-success ml-3" name="submit" value="Pesquisar"></input>
+            <div class="form-group">
+                <label>Empresa</label>
+                <select name="busca_empresa" id="busca_empresa" class="form-control">
+                    <option></option>
+                    <option value="1">Qintess</option>
+                    <option value="2">Resource IT</option>
+                    <option value="3">Cimcorp</option>
+                </select>
+            </div>
+            <input type="submit" class="btn btn-success" name="submit" value="Pesquisar">
             <a href="/pesquisa/searchall/" type="submit" class="btn btn-primary">Mostrar tudo</a>
         </form>
     </div>
-    <br>
-    {% if messages %}
+    <div class="clearfix visible-sm-block"></div>
+    <div class="container-fluid col-md-8 col-sm-12 col-12">
+        <!--Exibe mensagem de erro-->
+        {% if messages %}
         {% for message in messages %}
-            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                <div class="alert alert-danger text-center">{{ message }}</div>
-            {% else %}
-                <div class="alert alert-success text-center">{{ message }}</div>
-            {% endif %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        <div class="alert alert-danger text-center">{{ message }}</div>
+        {% else %}
+        <div class="alert alert-success text-center">{{ message }}</div>
+        {% endif %}
         {% endfor %}
-    {% endif %}
-    <div class="container-fluid">
-        <div class="col-10 m-auto pt-3 pb-2 text-center">
-            <p class="h2 pb-2 pt-2">Resultados</p>
+        {% endif %}
+        <div class="table-responsive">
+            <!--Tabela de atestados-->
+            <table class="table border col-12">
+                <thead class="thead-dark text-center">
+                <tr>
+                    <th scope="col">Número de atestado</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Data de emissão</th>
+                    <th scope="col">Tipo de serviço</th>
+                    <th scope="col">Empresa</th>
+                    <th scope="col">Arquivo</th>
+                    <th scope="col">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                {%if paginas%}
+                {%for linhas in paginas%}
+                <tr>
+                    <th scope="row">{{linhas.numero_documento}}</th>
+                    <td>{{linhas.cliente}}</td>
+                    <td>{{linhas.data_emissao}}</td>
+                    <td>{{linhas.tipo_de_servico}}</td>
+                    <td>{{linhas.empresa}}</td>
+                    <td><a href="{{linhas.documento_pdf.url}}" class="btn btn-primary btn-sm" target="_blank">Download PDF</a></td>
+                    <td>
+                        <a href="/pesquisa/view/{{linhas.id}}/" class="btn btn-link">Visualizar campo</a>
+                    </td>
+                </tr>
+                {%empty%}
+                <tr>
+                    <th scope="row">
+                    <td>Não contém nenhum registro</td>
+                </tr>
+                {%endfor%}
+                {%endif%}
+                </tbody>
+            </table>
         </div>
-
-        <table class="table">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">Número de atestado</th>
-                <th scope="col">Cliente</th>
-                <th scope="col">Data de emissão</th>
-                <th scope="col">Tipo de serviço</th>
-                <th scope="col">Empresa</th>
-                <th scope="col">Arquivo</th>
-                <th scope="col">Ações</th>
-            </tr>
-            </thead>
-            <tbody>
-            {%if db%}
-            {%for linhas in db%}
-            <tr>
-                <th scope="row">{{linhas.numero_documento}}</th>
-                <td>{{linhas.cliente}}</td>
-                <td>{{linhas.data_emissao}}</td>
-                <td>{{linhas.tipo_de_servico}}</td>
-                <td>{{linhas.empresa}}</td>
-                <td><a href="{{linhas.documento_pdf.url}}" class="btn btn-primary btn-sm" target="_blank">Download PDF</a></td>
-                <td>
-                    <a href="/pesquisa/view/{{linhas.id}}/" class="btn btn-link">Visualizar campo</a>
-                </td>
-            </tr>
-            {%empty%}
-            <tr>
-                <th scope="row">
-                <td>Não contém nenhum registro</td>
-                </th>
-            </tr>
-            {%endfor%}
-            {%endif%}
-            </tbody>
-        </table>
+        <!--Paginação-->
+        {%if paginas.has_other_pages%}
+        <nav>
+            <ul class="pagination justify-content-end">
+                <li class="page-item">
+                    {%if paginas.has_previous%}
+                    <a href="{% minha_url paginas.previous_page_number 'page' request.GET.urlencode %}" class="page-link"> Anterior </a>
+                    {%endif%}
+                </li>
+                <li class="page-item"><a class="page-link">{{paginas.number}}</a></li>
+                <li class="page-item">
+                    {%if paginas.has_next%}
+                    <a href="{%minha_url paginas.next_page_number 'page' request.GET.urlencode %}" class="page-link"> Próximo </a>
+                    {%endif%}
+                </li>
+            </ul>
+        </nav>
+        {%endif%}
     </div>
 </div>
-{%load static%}
 <script src="{%static 'javascript.js'%}"></script>
 </body>
 </html>
