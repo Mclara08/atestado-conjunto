@@ -35,7 +35,7 @@ def home(request):
     if request.user.is_authenticated:
         data = {}
         data['db'] = Atestados.objects.all()
-        return render(request, 'pesquisa.html', data)
+        return render(request, 'index.html', data)
     else:
         messages.error(request, 'Usuário não conectado!')
         return redirect('login.html')
