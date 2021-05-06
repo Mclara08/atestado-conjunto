@@ -3,3 +3,7 @@
     box-shadow: 0px 1px 3px;
     border-radius: 0px 0px 10px 10px;
 }
+
+.carousel-item img{
+    background-color: rgba(0, 0, 0, 0.6);
+}
