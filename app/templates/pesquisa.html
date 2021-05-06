@@ -26,7 +26,7 @@
 
 <div class="row m-auto">
     <!--Formulário de pesquisa-->
-    <div class="jumbotron col-md-4 col-sm-12 col-12">
+    <div class="jumbotron col-lg-4 col-md-12 col-sm-12 col-12">
         <form name="formpesquisa" id="form-pesquisa" method="GET" action="/pesquisa/">
             {%csrf_token%}
             <div class="form-group">
@@ -70,7 +70,7 @@
         </form>
     </div>
     <div class="clearfix visible-sm-block"></div>
-    <div class="container-fluid col-md-8 col-sm-12 col-12">
+    <div class="container-fluid col-lg-8 col-md-12 col-sm-12 col-12">
         <!--Exibe mensagem de erro-->
         {% if messages %}
         {% for message in messages %}
