@@ -69,3 +69,4 @@ sistema.
   - **[Python](https://www.python.org/)**
   - **[Django](https://www.djangoproject.com/)**
   - **[Django Crispy Forms](https://django-crispy-forms.readthedocs.io/en/latest/)**
+  - **[MySQL](https://www.mysql.com/)**
