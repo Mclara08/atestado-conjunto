@@ -22,7 +22,7 @@
             <h3>Bem-vindo ao site de entrega de atestados!</h3>
             <p>Cadastre seus atestados da empresa aqui</p>
         </div>
-        <div class="col-md-6 col-12 align-self-center" id="carrossel-home">
+        <div class="col-md-6 col-lg-6 d-none d-md-block align-self-center" id="carrossel-home">
             <div id="carrossel" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
                     <li data-target="#carrossel" data-slide-to="0" class="active"></li>
@@ -31,7 +31,7 @@
                 </ol>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img class="d-block" id="img1" src="{%static 'img/colorful-182220_1920.jpg'%}" alt="First slide">
+                        <img class="d-block" id="img1" src="{%static 'img/coder-1869306_1920.jpg'%}" alt="First slide">
                         <div class="carousel-caption d-none d-md-block">
                             <h5>Cadastre seus atestados</h5>
                             <p>A partir da aba "Cadastro", você poderá adicionar seus atestados ao sistema</p>
@@ -72,13 +72,12 @@
 
     $(function(){
         var altura = $(window).height();
-        var largura = $('#carrossel-home').width();
+        var alturaNav = $('#menu-nav').height();
+        var alturaReal = altura  - alturaNav;
 
-        $('#row-home').css('height', altura);
-        $('#carrossel').css('height', altura);
-        $('#carrossel').css('width', largura);
-        $('.d-block').css('height',altura);
-        $('.d-block').css('width',largura);
+        $('#row-home').css('height', alturaReal);
+        $('#carrossel').css('height', alturaReal);
+        $('.d-block').css('height',alturaReal);
     });
 
 </script>
