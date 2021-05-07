@@ -19,17 +19,17 @@
 </head>
 
 <body>
-    <div class="col-8 m-auto pt-2 pb-2 text-center">
+    <div class="col-12 m-auto pt-2 pb-2 text-center">
         <h1>CADASTRO</h1>
     </div>
 
-    <div class="col-8 m-auto pt-2 pb-2 text-center">
+    <div class="col-12 m-auto pt-2 pb-2 text-center">
         <a href="/pesquisa" class="btn btn-secondary">Voltar</a>
     </div>
 
     <!-- Formulário cadastro/atualização de atestados -->
-    <main role="main" class="container">
-        <div class="jumbotron col-9 m-auto pt-2 pb-2">
+    <main role="main" class="container-fluid">
+        <div class="jumbotron col-lg-5 col-md-12 col-sm-12 m-auto pt-2 pb-2">
             {% if messages %}
                 {% for message in messages %}
                     {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
