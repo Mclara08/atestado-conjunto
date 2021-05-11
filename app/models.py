@@ -25,7 +25,7 @@ class BaseModel(models.Model):
         abstract = True
 
 class Atestados(BaseModel):
-    numero_documento = models.CharField(max_length=30, unique=True)
+    numero_documento = models.PositiveBigIntegerField(unique=True)
 
     servico = (('Desenvolvimento', 'Desenvolvimento'),
                ('ITS', 'ITS'),
@@ -38,9 +38,6 @@ class Atestados(BaseModel):
     empresa = models.ForeignKey(Empresa, on_delete=models.RESTRICT, null=False, related_name='rel_empresa')
     cliente = models.ForeignKey(Cliente, on_delete=models.RESTRICT, null=False, related_name='rel_cliente')
     documento_pdf = models.FileField(upload_to='atestados/PDFs/')
-
-    # def __str__(self):
-    #     return str(self .id)
 
     def __getnumero__(self):
         self.numero_documento

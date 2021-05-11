@@ -70,10 +70,14 @@ def pesquisa(request):
 
         if lista_pesquisa != []:
             lista = Atestados.objects.filter(lista_pesquisa)
-            paginator = Paginator(lista, 6)
-            num_pag = request.GET.get('page')
-            data['paginas'] = paginator.get_page(num_pag)
-            return render(request, 'pesquisa.html', data)
+            if lista != {}:
+                paginator = Paginator(lista, 6)
+                num_pag = request.GET.get('page')
+                data['paginas'] = paginator.get_page(num_pag)
+                return render(request, 'pesquisa.html', data)
+            else:
+                messages.error(request, 'Sistema não contém nenhum registro com essas especificações!')
+                return redirect('pesquisa')
     else:
         messages.error(request, 'Usuário não conectado!')
         return redirect('entrar')
@@ -137,9 +141,7 @@ def edit(request, pk):
             data['db'] = Atestados.objects.get(pk=pk)
             data['form'] = AtestadosForm(instance=data['db'])
             return render(request, 'atestado_form.html', data)
-        else:
-            messages.error(request, 'O atestado selecionado não pertence ao usuário atual, portanto, não está autenticado para realizar a ação!')
-            return redirect('pesquisa')
+
     else:
         messages.error(request, 'Usuário não conectado!')
         return redirect('entrar')
