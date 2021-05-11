@@ -31,7 +31,7 @@
             {%csrf_token%}
             <div class="form-group">
                 <label>Número de identificação: </label>
-                <input type="text" name="busca_numero" id="busca_numero" class="form-control">
+                <input type="number" min=0 name="busca_numero" id="busca_numero" class="form-control">
             </div>
             <div class="form-group">
                 <label>Tipo de serviço: </label>
@@ -109,12 +109,12 @@
                         <a href="/pesquisa/view/{{linhas.id}}/" class="btn btn-link">Visualizar campo</a>
                     </td>
                 </tr>
-                {%empty%}
-                <tr>
-                    <th scope="row">
-                    <td>Não contém nenhum registro</td>
-                </tr>
                 {%endfor%}
+                {% else %}
+                <tr class="text-center">
+                    <th scope="row">
+                    <td colspan="4">Não contém nenhum registro</td>
+                </tr>
                 {%endif%}
                 </tbody>
             </table>

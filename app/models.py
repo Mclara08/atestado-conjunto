@@ -25,7 +25,7 @@ class BaseModel(models.Model):
         abstract = True
 
 class Atestados(BaseModel):
-    numero_documento = models.PositiveIntegerField(unique=True)
+    numero_documento = models.PositiveBigIntegerField(unique=True)
 
     servico = (('Desenvolvimento', 'Desenvolvimento'),
                ('ITS', 'ITS'),
