@@ -114,13 +114,11 @@ GitHub.sublime-settings
 !.vscode/tasks.json 
 !.vscode/launch.json 
 !.vscode/extensions.json 
-.history<<<<<<< HEAD
+.history
 venv/
 C:\Users\re041626\PycharmProjects\Atestado\media
 C:\Users\re041626\PycharmProjects\Atestado\media\atestados\PDFs
 C:\Users\re041626\PycharmProjects\atestado-conjunto\venv
-=======
 C:/Users/re041626/PycharmProjects/Atestado/media/**
 C:/Users/re041626/PycharmProjects/Atestado/media/atestados/PDFs/**
->>>>>>> 56baa26ffebb9e2a64a2746f8b80b4aa70fa4a4e
 atestado/__pycache__/settings.cpython-39.pyc
