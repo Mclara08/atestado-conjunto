@@ -56,23 +56,59 @@
                 <input type="number" min=0 name="busca_numero" id="busca_numero" class="form-control">
             </div>
             <div class="form-group">
-                <label>Tipo de serviço: </label>
-                <select name="busca_servico" id="busca_servico" class="form-control">
-                    <option></option>
-                    <option value="Desenvolvimento">Desenvolvimento</option>
-                    <option value="ITS">ITS</option>
-                    <option value="Suporte">Suporte</option>
-                    <option value="Service Desk">Service Desk</option>
-                </select>
+                <p>Tipo de serviço: </p>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" id="busca_servico_desenv" name="busca_servico_desenv" class="form-check-input"><label for="busca_servico_desenv" class="form-check-label">Desenvolvimento</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" id="busca_servico_its" name="busca_servico_its" class="form-check-input"><label for="busca_servico_its" class="form-check-label">ITS</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" id="busca_servico_sd" name="busca_servico_sd" class="form-check-input"><label for="busca_servico_sd" class="form-check-label">Service Desk</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" id="busca_servico_sup" name="busca_servico_sup" class="form-check-input"><label for="busca_servico_sup" class="form-check-label">Suporte</label>
+                </div>
             </div>
+            <!--                <select name="busca_servico" id="busca_servico" class="form-control">-->
+            <!--                    <option></option>-->
+            <!--                    <option value="Desenvolvimento">Desenvolvimento</option>-->
+            <!--                    <option value="ITS">ITS</option>-->
+            <!--                    <option value="Suporte">Suporte</option>-->
+            <!--                    <option value="Service Desk">Service Desk</option>-->
+            <!--                </select>-->
             <div class="form-group">
-                <label>Cliente: </label>
-                <select name="busca_cliente" id="busca_cliente" class="form-control">
-                    <option></option>
-                    <option value="1">Banco do Brasil</option>
-                    <option value="2">ANA - Agência Nacional de Águas</option>
-                    <option value="3">Caixa Econômica Federal</option>
-                </select>
+                <p>Cliente: </p>
+                {%for cli in paginas%}
+                    {% with clientes = []%}
+                        {% with clientes.add(cli.cliente.id) %}
+                            {% with num = 0%}
+                                {%if clientes[num] != cli.cliente.id%}
+                                    <div class="form-check form-check-inline">
+                                        <input type="checkbox" id="busca_cliente_{{cli.cliente.id}}" name="busca_cliente_{{cli.cliente.id}}" class="form-check-input"><label for="busca_cliente_{{cli.cliente.id}}" class="form-check-label">{{cli.cliente.nome}}</label>
+                                    </div>
+                                {%endif%}
+                                {%num++%}
+                            {%with%}
+                        {%with%}
+                    {%with%}
+                {%empty%}
+                {%endfor%}
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" id="busca_servico_its" name="busca_servico_its" class="form-check-input"><label for="busca_servico_its" class="form-check-label">ITS</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" id="busca_servico_sd" name="busca_servico_sd" class="form-check-input"><label for="busca_servico_sd" class="form-check-label">Service Desk</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" id="busca_servico_sup" name="busca_servico_sup" class="form-check-input"><label for="busca_servico_sup" class="form-check-label">Suporte</label>
+                </div>
+                <!--        <select name="busca_cliente" id="busca_cliente" class="form-control">-->
+                <!--            <option></option>-->
+                <!--            <option value="1">Banco do Brasil</option>-->
+                <!--            <option value="2">ANA - Agência Nacional de Águas</option>-->
+                <!--            <option value="3">Caixa Econômica Federal</option>-->
+                <!--        </select>-->
             </div>
             <div class="row">
                 <div class="form-group col-6">
