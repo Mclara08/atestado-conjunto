@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -96,12 +98,16 @@ def create(request):
     if request.user.is_authenticated:
         form = AtestadosForm(request.POST, request.FILES or None)
         if form.is_valid():
-            Atestados.objects.create(numero_documento=form.cleaned_data['numero_documento'], tipo_de_servico=form.cleaned_data['tipo_de_servico'],
-                                     data_emissao=form.cleaned_data['data_emissao'], empresa=form.cleaned_data['empresa'],
-                                     cliente=form.cleaned_data['cliente'], documento_pdf=form.cleaned_data['documento_pdf'],
-                                     created_by=request.user)
-            messages.success(request, 'Operação realizada com sucesso!')
-            return redirect('form')
+            if form.cleaned_data['data_emissao'] > datetime.date.today():
+                messages.error(request, 'Operação não pôde ser realizada! A data de emissão deve ser igual ou inferior à data do dia de hoje.')
+                return redirect('form')
+            else:
+                Atestados.objects.create(numero_documento=form.cleaned_data['numero_documento'], tipo_de_servico=form.cleaned_data['tipo_de_servico'],
+                                         data_emissao=form.cleaned_data['data_emissao'], empresa=form.cleaned_data['empresa'],
+                                         cliente=form.cleaned_data['cliente'], documento_pdf=form.cleaned_data['documento_pdf'],
+                                         created_by=request.user)
+                messages.success(request, 'Operação realizada com sucesso!')
+                return redirect('form')
         else:
             messages.error(request, 'Operação não pôde ser realizada! Por favor, verifique se o número do documento informado já existe na base de dados.')
             return redirect('form')
