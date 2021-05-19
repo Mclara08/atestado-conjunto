@@ -46,13 +46,39 @@ def home(request):
 def pesquisa(request):
     if request.user.is_authenticated:
         data = {}
+
+        # Número de identificação do documento
         busca_numero = request.GET.get('busca_numero')
+
+        # Data de emissão
+        busca_data_emissao1 = request.GET.get('busca_data_emissao1')
+        busca_data_emissao2 = request.GET.get('busca_data_emissao2')
+
+        # Tipo de serviço
+        lista_servicos = []
         busca_servico_desenv = request.GET.get('busca_servico_desenv')
         busca_servico_its = request.GET.get('busca_servico_its')
         busca_servico_sd = request.GET.get('busca_servico_sd')
         busca_servico_sup = request.GET.get('busca_servico_sup')
-        busca_data_emissao1 = request.GET.get('busca_data_emissao1')
-        busca_data_emissao2 = request.GET.get('busca_data_emissao2')
+        if busca_servico_desenv:
+            lista_servicos.append(busca_servico_desenv)
+        if busca_servico_its:
+            lista_servicos.append(busca_servico_its)
+        if busca_servico_sd:
+            lista_servicos.append(busca_servico_sd)
+        if busca_servico_sup:
+            lista_servicos.append(busca_servico_sup)
+
+        # Cliente
+        busca_cliente1 = request.GET.get('busca_cliente_1')
+        busca_cliente2 = request.GET.get('busca_cliente_2')
+        busca_cliente3 = request.GET.get('busca_cliente_3')
+        busca_cliente4 = request.GET.get('busca_cliente_4')
+
+        # Empresa
+        busca_empresa1 = request.GET.get('busca_empresa_1')
+        busca_empresa2 = request.GET.get('busca_empresa_2')
+        busca_empresa3 = request.GET.get('busca_empresa_3')
 
         lista_pesquisa = Q(id__gt=0)
 
@@ -65,43 +91,35 @@ def pesquisa(request):
                 lista_pesquisa.add(Q(data_emissao=busca_data_emissao1), Q.AND)
             else:
                 lista_pesquisa.add(Q(data_emissao=busca_data_emissao2), Q.AND)
-        if busca_servico_desenv:
-            print(busca_servico_desenv)
-            lista_pesquisa.add(Q(tipo_de_servico=busca_servico_desenv), Q.AND)
-        if busca_servico_its:
-            print(busca_servico_its)
-            lista_pesquisa.add(Q(tipo_de_servico=busca_servico_its), Q.AND)
-        if busca_servico_sd:
-            print(busca_servico_sd)
-            lista_pesquisa.add(Q(tipo_de_servico=busca_servico_sd), Q.AND)
-        if busca_servico_sup:
-            print(busca_servico_sup)
-            lista_pesquisa.add(Q(tipo_de_servico=busca_servico_sup), Q.AND)
-        # if busca_cliente_bb:
-        #     lista_pesquisa.add(Q(cliente=busca_cliente_bb), Q.OR)
-        # if busca_cliente_ana:
-        #     lista_pesquisa.add(Q(cliente=busca_cliente_ana), Q.OR)
-        # if busca_cliente_caixa:
-        #     lista_pesquisa.add(Q(cliente=busca_cliente_caixa), Q.OR)
-        if busca_data_emissao1 and busca_data_emissao2:
-            lista_pesquisa.add(Q(data_emissao__range=[busca_data_emissao1, busca_data_emissao2]), Q.AND)
-        elif busca_data_emissao1 or busca_data_emissao2:
-            if busca_data_emissao1:
-                lista_pesquisa.add(Q(data_emissao=busca_data_emissao1), Q.AND)
+
+        for item in lista_servicos:
+            i = lista_servicos.__len__() - 1
+            if item != lista_servicos[i]:
+                lista_pesquisa.add(Q(tipo_de_servico=item), Q.OR)
             else:
-                lista_pesquisa.add(Q(data_emissao=busca_data_emissao2), Q.AND)
-        # if busca_empresa_qin:
-        #     lista_pesquisa.add(Q(empresa=busca_empresa_qin), Q.AND)
-        # if busca_empresa_reit:
-        #     lista_pesquisa.add(Q(empresa=busca_empresa_reit), Q.AND)
-        # if busca_empresa_cim:
-        #     lista_pesquisa.add(Q(empresa=busca_empresa_cim), Q.AND)
+                lista_pesquisa.add(Q(tipo_de_servico=item), Q.AND)
+
+        if busca_cliente1:
+            lista_pesquisa.add(Q(cliente__id=busca_cliente1), Q.AND)
+        if busca_cliente2:
+            lista_pesquisa.add(Q(cliente__id=busca_cliente2), Q.AND)
+        if busca_cliente3:
+            lista_pesquisa.add(Q(cliente__id=busca_cliente3), Q.AND)
+        if busca_cliente4:
+            lista_pesquisa.add(Q(cliente__id=busca_cliente4), Q.AND)
+
+        if busca_empresa1:
+            lista_pesquisa.add(Q(empresa__id=busca_empresa1), Q.AND)
+        if busca_empresa2:
+            lista_pesquisa.add(Q(empresa__id=busca_empresa2), Q.AND)
+        if busca_empresa3:
+            lista_pesquisa.add(Q(empresa__id=busca_empresa3), Q.AND)
 
         if lista_pesquisa != []:
             lista = Atestados.objects.filter(lista_pesquisa)
             data['clientes'] = Cliente.objects.all();
             data['empresas'] = Empresa.objects.all();
-            if lista != {}:
+            if lista:
                 paginator = Paginator(lista, 6)
                 num_pag = request.GET.get('page')
                 data['paginas'] = paginator.get_page(num_pag)

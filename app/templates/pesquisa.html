@@ -74,7 +74,7 @@
                 <p>Cliente: </p>
                 {%for cli in clientes%}
                     <div class="form-check form-check-inline">
-                        <input type="checkbox" id="busca_cliente" name="busca_cliente" class="form-check-input" value="{{cli.id}}"><label for="busca_cliente" class="form-check-label">{{cli.nome}}</label>
+                        <input type="checkbox" id="busca_cliente_{{cli.id}}" name="busca_cliente_{{cli.id}}" class="form-check-input" value="{{cli.id}}"><label for="busca_cliente_{{cli.id}}" class="form-check-label">{{cli.nome}}</label>
                     </div>
                 {%endfor%}
             </div>
