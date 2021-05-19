@@ -58,57 +58,25 @@
             <div class="form-group">
                 <p>Tipo de serviço: </p>
                 <div class="form-check form-check-inline">
-                    <input type="checkbox" id="busca_servico_desenv" name="busca_servico_desenv" class="form-check-input"><label for="busca_servico_desenv" class="form-check-label">Desenvolvimento</label>
+                    <input type="checkbox" id="busca_servico_desenv" name="busca_servico_desenv" class="form-check-input" value="Desenvolvimento"><label for="busca_servico_desenv" class="form-check-label">Desenvolvimento</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input type="checkbox" id="busca_servico_its" name="busca_servico_its" class="form-check-input"><label for="busca_servico_its" class="form-check-label">ITS</label>
+                    <input type="checkbox" id="busca_servico_its" name="busca_servico_its" class="form-check-input" value="ITS"><label for="busca_servico_its" class="form-check-label">ITS</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input type="checkbox" id="busca_servico_sd" name="busca_servico_sd" class="form-check-input"><label for="busca_servico_sd" class="form-check-label">Service Desk</label>
+                    <input type="checkbox" id="busca_servico_sd" name="busca_servico_sd" class="form-check-input" value="Service Desk"><label for="busca_servico_sd" class="form-check-label">Service Desk</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input type="checkbox" id="busca_servico_sup" name="busca_servico_sup" class="form-check-input"><label for="busca_servico_sup" class="form-check-label">Suporte</label>
+                    <input type="checkbox" id="busca_servico_sup" name="busca_servico_sup" class="form-check-input" value="Suporte"><label for="busca_servico_sup" class="form-check-label">Suporte</label>
                 </div>
             </div>
-            <!--                <select name="busca_servico" id="busca_servico" class="form-control">-->
-            <!--                    <option></option>-->
-            <!--                    <option value="Desenvolvimento">Desenvolvimento</option>-->
-            <!--                    <option value="ITS">ITS</option>-->
-            <!--                    <option value="Suporte">Suporte</option>-->
-            <!--                    <option value="Service Desk">Service Desk</option>-->
-            <!--                </select>-->
             <div class="form-group">
                 <p>Cliente: </p>
-                {%for cli in paginas%}
-                    {% with clientes = []%}
-                        {% with clientes.add(cli.cliente.id) %}
-                            {% with num = 0%}
-                                {%if clientes[num] != cli.cliente.id%}
-                                    <div class="form-check form-check-inline">
-                                        <input type="checkbox" id="busca_cliente_{{cli.cliente.id}}" name="busca_cliente_{{cli.cliente.id}}" class="form-check-input"><label for="busca_cliente_{{cli.cliente.id}}" class="form-check-label">{{cli.cliente.nome}}</label>
-                                    </div>
-                                {%endif%}
-                                {%num++%}
-                            {%with%}
-                        {%with%}
-                    {%with%}
-                {%empty%}
+                {%for cli in clientes%}
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" id="busca_cliente" name="busca_cliente" class="form-check-input" value="{{cli.id}}"><label for="busca_cliente" class="form-check-label">{{cli.nome}}</label>
+                    </div>
                 {%endfor%}
-                <div class="form-check form-check-inline">
-                    <input type="checkbox" id="busca_servico_its" name="busca_servico_its" class="form-check-input"><label for="busca_servico_its" class="form-check-label">ITS</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input type="checkbox" id="busca_servico_sd" name="busca_servico_sd" class="form-check-input"><label for="busca_servico_sd" class="form-check-label">Service Desk</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input type="checkbox" id="busca_servico_sup" name="busca_servico_sup" class="form-check-input"><label for="busca_servico_sup" class="form-check-label">Suporte</label>
-                </div>
-                <!--        <select name="busca_cliente" id="busca_cliente" class="form-control">-->
-                <!--            <option></option>-->
-                <!--            <option value="1">Banco do Brasil</option>-->
-                <!--            <option value="2">ANA - Agência Nacional de Águas</option>-->
-                <!--            <option value="3">Caixa Econômica Federal</option>-->
-                <!--        </select>-->
             </div>
             <div class="row">
                 <div class="form-group col-6">
@@ -121,13 +89,12 @@
                 </div>
             </div>
             <div class="form-group">
-                <label>Empresa</label>
-                <select name="busca_empresa" id="busca_empresa" class="form-control">
-                    <option></option>
-                    <option value="1">Qintess</option>
-                    <option value="2">Resource IT</option>
-                    <option value="3">Cimcorp</option>
-                </select>
+                <p>Empresa</p>
+                {%for emp in empresas%}
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" id="busca_empresa_{{emp.id}}" name="busca_empresa_{{emp.id}}" class="form-check-input" value="{{emp.id}}"><label for="busca_empresa_{{emp.id}}" class="form-check-label">{{emp.nome}}</label>
+                    </div>
+                {%endfor%}
             </div>
             <input type="submit" class="btn btn-success" name="submit" value="Pesquisar">
             <a href="/pesquisa/searchall/" type="submit" class="btn btn-primary">Mostrar tudo</a>

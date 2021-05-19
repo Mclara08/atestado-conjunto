@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from app.forms import *
-from app.models import Atestados
+from app.models import Atestados, Cliente, Empresa
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_protect
@@ -47,19 +47,17 @@ def pesquisa(request):
     if request.user.is_authenticated:
         data = {}
         busca_numero = request.GET.get('busca_numero')
-        busca_servico = request.GET.get('busca_servico')
-        busca_cliente = request.GET.get('busca_cliente')
+        busca_servico_desenv = request.GET.get('busca_servico_desenv')
+        busca_servico_its = request.GET.get('busca_servico_its')
+        busca_servico_sd = request.GET.get('busca_servico_sd')
+        busca_servico_sup = request.GET.get('busca_servico_sup')
         busca_data_emissao1 = request.GET.get('busca_data_emissao1')
         busca_data_emissao2 = request.GET.get('busca_data_emissao2')
-        busca_empresa = request.GET.get('busca_empresa')
+
         lista_pesquisa = Q(id__gt=0)
 
         if busca_numero:
             lista_pesquisa.add(Q(numero_documento=busca_numero), Q.AND)
-        if busca_servico:
-            lista_pesquisa.add(Q(tipo_de_servico=busca_servico), Q.AND)
-        if busca_cliente:
-            lista_pesquisa.add(Q(cliente=busca_cliente), Q.AND)
         if busca_data_emissao1 and busca_data_emissao2:
             lista_pesquisa.add(Q(data_emissao__range=[busca_data_emissao1, busca_data_emissao2]), Q.AND)
         elif busca_data_emissao1 or busca_data_emissao2:
@@ -67,11 +65,42 @@ def pesquisa(request):
                 lista_pesquisa.add(Q(data_emissao=busca_data_emissao1), Q.AND)
             else:
                 lista_pesquisa.add(Q(data_emissao=busca_data_emissao2), Q.AND)
-        if busca_empresa:
-            lista_pesquisa.add(Q(empresa=busca_empresa), Q.AND)
+        if busca_servico_desenv:
+            print(busca_servico_desenv)
+            lista_pesquisa.add(Q(tipo_de_servico=busca_servico_desenv), Q.AND)
+        if busca_servico_its:
+            print(busca_servico_its)
+            lista_pesquisa.add(Q(tipo_de_servico=busca_servico_its), Q.AND)
+        if busca_servico_sd:
+            print(busca_servico_sd)
+            lista_pesquisa.add(Q(tipo_de_servico=busca_servico_sd), Q.AND)
+        if busca_servico_sup:
+            print(busca_servico_sup)
+            lista_pesquisa.add(Q(tipo_de_servico=busca_servico_sup), Q.AND)
+        # if busca_cliente_bb:
+        #     lista_pesquisa.add(Q(cliente=busca_cliente_bb), Q.OR)
+        # if busca_cliente_ana:
+        #     lista_pesquisa.add(Q(cliente=busca_cliente_ana), Q.OR)
+        # if busca_cliente_caixa:
+        #     lista_pesquisa.add(Q(cliente=busca_cliente_caixa), Q.OR)
+        if busca_data_emissao1 and busca_data_emissao2:
+            lista_pesquisa.add(Q(data_emissao__range=[busca_data_emissao1, busca_data_emissao2]), Q.AND)
+        elif busca_data_emissao1 or busca_data_emissao2:
+            if busca_data_emissao1:
+                lista_pesquisa.add(Q(data_emissao=busca_data_emissao1), Q.AND)
+            else:
+                lista_pesquisa.add(Q(data_emissao=busca_data_emissao2), Q.AND)
+        # if busca_empresa_qin:
+        #     lista_pesquisa.add(Q(empresa=busca_empresa_qin), Q.AND)
+        # if busca_empresa_reit:
+        #     lista_pesquisa.add(Q(empresa=busca_empresa_reit), Q.AND)
+        # if busca_empresa_cim:
+        #     lista_pesquisa.add(Q(empresa=busca_empresa_cim), Q.AND)
 
         if lista_pesquisa != []:
             lista = Atestados.objects.filter(lista_pesquisa)
+            data['clientes'] = Cliente.objects.all();
+            data['empresas'] = Empresa.objects.all();
             if lista != {}:
                 paginator = Paginator(lista, 6)
                 num_pag = request.GET.get('page')
