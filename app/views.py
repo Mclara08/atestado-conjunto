@@ -1,14 +1,20 @@
 import datetime
 
+import textract
+import nltk
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from nltk import word_tokenize
+nltk.download('punkt')
+
 from app.forms import *
 from app.models import Atestados, Cliente, Empresa
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_protect
 from django.core.paginator import Paginator
+import PyPDF2
 
 
 # Create your views here.
@@ -92,6 +98,16 @@ def pesquisa(request):
                 lista_empresa.add(Q(empresa__id=busca_empresa), Q.OR)
             j += 1
 
+        # Pegando valor atribuido no formulário para busca de palavras
+        busca_palavra = request.GET.get('busca_palavra')
+        lista_palavra = Q()
+        if busca_palavra:
+            messages.success(request, "Alguns dos PDFs podem ser ilegíveis, portanto, não aparecerão na tabela abaixo.")
+            for registro in Atestados.objects.all():
+                x = pesquisa_palavra(('media/'+str(registro.documento_pdf)), busca_palavra)
+                if x:
+                    lista_palavra.add(Q(documento_pdf__iexact=registro.documento_pdf), Q.OR)
+
         # Adicionando atributos na lista para filtrar
         if busca_numero:
             lista_pesquisa.add(Q(numero_documento=busca_numero), Q.AND)
@@ -108,6 +124,10 @@ def pesquisa(request):
             lista_pesquisa.add(lista_cliente, Q.AND)
         if lista_empresa:
             lista_pesquisa.add(lista_empresa, Q.AND)
+        if lista_palavra.__len__() == None:
+            messages.error(request, "Nenhum resultado obtido.")
+        elif lista_palavra:
+            lista_pesquisa.add(lista_palavra, Q.AND)
 
         # Verifica existência da lista, filtra de acordo com seu conteúdo e retorna os resultados em páginas
         if lista_pesquisa:
@@ -126,6 +146,29 @@ def pesquisa(request):
         messages.error(request, 'Usuário não conectado!')
         return redirect('entrar')
 
+def pesquisa_palavra(arquivo, palavra):
+    try:
+        pdfFileObj = open(arquivo, 'rb')
+        pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
+        num_pages = pdfReader.numPages
+        count = 0
+        text = ""
+        while count < num_pages:
+            pageObj = pdfReader.getPage(count)
+            count += 1
+            text += pageObj.extractText()
+        if text != "":
+            text = text
+        else:
+            text = textract.process(arquivo, method='tesseract', language='eng')
+        tokens = word_tokenize(text)
+        punctuation = ['(', ')', ';', ':', '[', ']', ',', '.']
+        keywords = [word for word in tokens if not word in punctuation]
+        for k in keywords:
+            if k == palavra:
+                return arquivo
+    except:
+        return None
 
 def form(request):
     if request.user.is_authenticated:
