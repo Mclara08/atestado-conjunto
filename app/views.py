@@ -50,15 +50,16 @@ def home(request):
 def pesquisa(request):
     if request.user.is_authenticated:
         data = {}
+        lista_pesquisa = Q(id__gt=0) # Criação da lista de pesquisa
 
-        # Número de identificação do documento
+        # Pegando valor atribuido no formulário para número de identificação do documento
         busca_numero = request.GET.get('busca_numero')
 
-        # Data de emissão
+        # Pegando valor atribuido no formulário para data de emissão
         busca_data_emissao1 = request.GET.get('busca_data_emissao1')
         busca_data_emissao2 = request.GET.get('busca_data_emissao2')
 
-        # Tipo de serviço
+        # Pegando valor atribuido no formulário para tipo de serviço
         lista_servicos = Q()
         busca_servico_desenv = request.GET.get('busca_servico_desenv')
         busca_servico_its = request.GET.get('busca_servico_its')
@@ -73,7 +74,7 @@ def pesquisa(request):
         if busca_servico_sup:
             lista_servicos.add(Q(tipo_de_servico=busca_servico_sup), Q.OR)
 
-        # Cliente
+        # Pegando valor atribuido no formulário para cliente
         lista_cliente = Q()
         i = 0
         while i <= Cliente.objects.all().count():
@@ -82,7 +83,7 @@ def pesquisa(request):
                 lista_cliente.add(Q(cliente__id=busca_cliente), Q.OR)
             i += 1
 
-        # Empresa
+        # Pegando valor atribuido no formulário para empresa
         lista_empresa = Q()
         j = 0
         while j <= Empresa.objects.all().count():
@@ -90,8 +91,6 @@ def pesquisa(request):
                 busca_empresa = request.GET.get('busca_empresa_' + str(j))
                 lista_empresa.add(Q(empresa__id=busca_empresa), Q.OR)
             j += 1
-
-        lista_pesquisa = Q(id__gt=0)
 
         # Adicionando atributos na lista para filtrar
         if busca_numero:
@@ -110,7 +109,7 @@ def pesquisa(request):
         if lista_empresa:
             lista_pesquisa.add(lista_empresa, Q.AND)
 
-        # Verifica existência da lista e retorna os resultados em páginas
+        # Verifica existência da lista, filtra de acordo com seu conteúdo e retorna os resultados em páginas
         if lista_pesquisa:
             lista = Atestados.objects.filter(lista_pesquisa)
             data['clientes'] = Cliente.objects.all()
@@ -168,8 +167,7 @@ def create(request):
 # Função para visualizar detalhes de atestados cadastrados
 def view(request, pk):
     if request.user.is_authenticated:
-        data = {}
-        data['db'] = Atestados.objects.get(pk=pk)
+        data = {'db': Atestados.objects.get(pk=pk)}
         return render(request, 'view.html', data)
     else:
         messages.error(request, 'Usuário não conectado!')
@@ -195,8 +193,7 @@ def edit(request, pk):
     if request.user.is_authenticated:
         dado = Atestados.objects.get(pk=pk)
         if dado.created_by == request.user:
-            data = {}
-            data['db'] = Atestados.objects.get(pk=pk)
+            data = {'db': Atestados.objects.get(pk=pk)}
             data['form'] = AtestadosForm(instance=data['db'])
             return render(request, 'atestado_form.html', data)
 
@@ -210,8 +207,7 @@ def update(request, pk):
     if request.user.is_authenticated:
         dado = Atestados.objects.get(pk=pk)
         if dado.created_by == request.user:
-            data = {}
-            data['db'] = Atestados.objects.get(pk=pk)
+            data = {'db': Atestados.objects.get(pk=pk)}
             form = AtestadosForm(request.POST, request.FILES or None, instance=data['db'])
             if form.is_valid():
                 Atestados.objects.filter(pk=pk).update(tipo_de_servico=form.cleaned_data['tipo_de_servico'],

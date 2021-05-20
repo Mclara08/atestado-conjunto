@@ -89,7 +89,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <p>Empresa</p>
+                <p>Empresa: </p>
                 {%for emp in empresas%}
                     <div class="form-check form-check-inline">
                         <input type="checkbox" id="busca_empresa_{{emp.id}}" name="busca_empresa_{{emp.id}}" class="form-check-input" value="{{emp.id}}"><label for="busca_empresa_{{emp.id}}" class="form-check-label">{{emp.nome}}</label>
