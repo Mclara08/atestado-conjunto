@@ -153,18 +153,17 @@ def pesquisa_palavra(arquivo, palavra):
         num_pages = pdfReader.numPages
         count = 0
         text = ""
+        frases = []
         while count < num_pages:
             pageObj = pdfReader.getPage(count)
             count += 1
             text += pageObj.extractText()
         if text != "":
             text = text
-        else:
-            text = textract.process(arquivo, method='tesseract', language='eng')
-        tokens = word_tokenize(text)
-        punctuation = ['(', ')', ';', ':', '[', ']', ',', '.']
-        keywords = [word for word in tokens if not word in punctuation]
-        for k in keywords:
+            print(text)
+            for frase in text:
+                frases.append(frase.split(", "))
+        for k in frases:
             if k == palavra:
                 return arquivo
     except:
