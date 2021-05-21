@@ -119,6 +119,8 @@ def pesquisa(request):
                 num_pag = request.GET.get('page')
                 data['paginas'] = paginator.get_page(num_pag)
                 return render(request, 'pesquisa.html', data)
+            elif not lista:
+                return render(request, 'pesquisa.html', data)
             else:
                 messages.error(request, 'Sistema não contém nenhum registro com essa(s) especificação(s)!')
                 return redirect('pesquisa')

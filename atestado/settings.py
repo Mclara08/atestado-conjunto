@@ -80,9 +80,9 @@ WSGI_APPLICATION = 'atestado.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dbatestado',
-        'USER': 'dbadmin',
-        'PASSWORD': '12345',
+        'NAME': 'db_atestado',
+        'USER': 'root',
+        'PASSWORD': 'admin',
         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
