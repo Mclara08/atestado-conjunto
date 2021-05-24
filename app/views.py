@@ -1,12 +1,9 @@
 import datetime
 
-import textract
 import nltk
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from nltk import word_tokenize
-nltk.download('punkt')
 
 from app.forms import *
 from app.models import Atestados, Cliente, Empresa
@@ -45,7 +42,7 @@ def sair(request):
 @login_required(login_url='/entrar')
 def home(request):
     if request.user.is_authenticated:
-        data = {'db': Atestados.objects.all()}
+        data = {'db': Atestados.objects.all().order_by('id')}
         return render(request, 'index.html', data)
     else:
         messages.error(request, 'Usuário não conectado!')
@@ -124,14 +121,12 @@ def pesquisa(request):
             lista_pesquisa.add(lista_cliente, Q.AND)
         if lista_empresa:
             lista_pesquisa.add(lista_empresa, Q.AND)
-        if lista_palavra.__len__() == None:
-            messages.error(request, "Nenhum resultado obtido.")
-        elif lista_palavra:
+        if lista_palavra:
             lista_pesquisa.add(lista_palavra, Q.AND)
 
         # Verifica existência da lista, filtra de acordo com seu conteúdo e retorna os resultados em páginas
         if lista_pesquisa:
-            lista = Atestados.objects.filter(lista_pesquisa)
+            lista = Atestados.objects.filter(lista_pesquisa).order_by('id')
             data['clientes'] = Cliente.objects.all()
             data['empresas'] = Empresa.objects.all()
             if lista:
@@ -140,16 +135,16 @@ def pesquisa(request):
                 data['paginas'] = paginator.get_page(num_pag)
                 return render(request, 'pesquisa.html', data)
             else:
-                messages.error(request, 'Sistema não contém nenhum registro com essa(s) especificação(s)!')
+                messages.error(request, 'Sistema não contém nenhum cadastro com essa(s) especificação(s)!')
                 return redirect('pesquisa')
     else:
         messages.error(request, 'Usuário não conectado!')
         return redirect('entrar')
 
-def pesquisa_palavra(arquivo, palavra):
+def pesquisa_palavra(arquivo, busca):
     try:
         pdfFileObj = open(arquivo, 'rb')
-        pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
+        pdfReader = PyPDF2.PdfFileReader(pdfFileObj, strict=False)
         num_pages = pdfReader.numPages
         count = 0
         text = ""
@@ -160,11 +155,12 @@ def pesquisa_palavra(arquivo, palavra):
             text += pageObj.extractText()
         if text != "":
             text = text
-            print(text)
-            for frase in text:
-                frases.append(frase.split(", "))
+        for linha in text.split(", "):
+            frases.append(linha)
         for k in frases:
-            if k == palavra:
+            print(k)
+            if busca == k:
+                pdfFileObj.close()
                 return arquivo
     except:
         return None
@@ -220,7 +216,7 @@ def view(request, pk):
 def searchall(request):
     if request.user.is_authenticated:
         data = {}
-        todos = Atestados.objects.all()
+        todos = Atestados.objects.all().order_by('id')
         paginator = Paginator(todos, 6)
         pages = request.GET.get('page')
         data['paginas'] = paginator.get_page(pages)
