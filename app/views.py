@@ -155,11 +155,10 @@ def pesquisa_palavra(arquivo, busca):
             text += pageObj.extractText()
         if text != "":
             text = text
-        for linha in text.split(", "):
+        for linha in text.split(". "):
             frases.append(linha)
         for k in frases:
-            print(k)
-            if busca == k:
+            if k == busca:
                 pdfFileObj.close()
                 return arquivo
     except:
