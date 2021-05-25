@@ -1,9 +1,13 @@
 import datetime
+from io import StringIO
 
-import nltk
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from pdfminer.converter import TextConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.pdfpage import PDFPage
 
 from app.forms import *
 from app.models import Atestados, Cliente, Empresa
@@ -100,7 +104,7 @@ def pesquisa(request):
         lista_palavra = Q()
         if busca_palavra:
             for registro in Atestados.objects.all():
-                x = pesquisa_palavra(('media/'+str(registro.documento_pdf)), busca_palavra)
+                x = pesquisaPalavra(('media/'+str(registro.documento_pdf)), busca_palavra)
                 if x:
                     lista_palavra.add(Q(documento_pdf__iexact=registro.documento_pdf), Q.OR)
 
@@ -141,31 +145,32 @@ def pesquisa(request):
         messages.error(request, 'Usuário não conectado!')
         return redirect('entrar')
 
-def pesquisa_palavra(arquivo, busca):
+def pesquisaPalavra(caminho, palavras):
     try:
-        pdfFileObj = open(arquivo, 'rb')
-        pdfReader = PyPDF2.PdfFileReader(pdfFileObj, strict=False)
-        num_pages = pdfReader.numPages
-        count = 0
-        text = ""
-        frases = []
-        txt = ""
-        while count < num_pages:
-            pageObj = pdfReader.getPage(count)
-            count += 1
-            text += pageObj.extractText()
-        if text != "":
-            text = text.upper()
-        for linha in text.split(". "):
-            frases.append(linha)
-        for frase in frases:
-            txt += frase.replace("\n", " ").strip()
-        print(txt)
-        if txt.find(busca.upper()) != -1:
-            pdfFileObj.close()
-            return arquivo
+        texto = conversorPdf(caminho)
+        if texto.find(palavras.upper()) != -1:
+            return caminho
     except:
         return None
+
+def conversorPdf(caminho):
+    resource_manager = PDFResourceManager(caching=True)
+    out_text = StringIO()
+    laParams = LAParams()
+    text_converter = TextConverter(resource_manager, out_text, laparams=laParams)
+    fp = open(caminho, 'rb')
+
+    interpreter = PDFPageInterpreter(resource_manager, text_converter)
+
+    for page in PDFPage.get_pages(fp, pagenos=set(), password="", caching=True, check_extractable=True):
+        interpreter.process_page(page)
+
+    text = out_text.getvalue()
+
+    fp.close()
+    text_converter.close()
+    out_text.close()
+    return text.upper()
 
 def form(request):
     if request.user.is_authenticated:
