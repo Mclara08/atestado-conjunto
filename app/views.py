@@ -149,6 +149,7 @@ def pesquisa_palavra(arquivo, busca):
         count = 0
         text = ""
         frases = []
+        txt = ""
         while count < num_pages:
             pageObj = pdfReader.getPage(count)
             count += 1
@@ -157,10 +158,12 @@ def pesquisa_palavra(arquivo, busca):
             text = text.upper()
         for linha in text.split(". "):
             frases.append(linha)
-        for k in frases:
-            if k.upper().find(busca.upper()) != -1:
-                pdfFileObj.close()
-                return arquivo
+        for frase in frases:
+            txt += frase.replace("\n", " ").strip()
+        print(txt)
+        if txt.find(busca.upper()) != -1:
+            pdfFileObj.close()
+            return arquivo
     except:
         return None
 
