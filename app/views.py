@@ -99,7 +99,6 @@ def pesquisa(request):
         busca_palavra = request.GET.get('busca_palavra')
         lista_palavra = Q()
         if busca_palavra:
-            messages.success(request, "Alguns dos PDFs podem ser ilegíveis, portanto, não aparecerão na tabela abaixo.")
             for registro in Atestados.objects.all():
                 x = pesquisa_palavra(('media/'+str(registro.documento_pdf)), busca_palavra)
                 if x:
@@ -122,11 +121,12 @@ def pesquisa(request):
         if lista_empresa:
             lista_pesquisa.add(lista_empresa, Q.AND)
         if lista_palavra:
+            messages.success(request, "Alguns dos PDFs podem ser ilegíveis, portanto, não aparecerão na tabela abaixo.")
             lista_pesquisa.add(lista_palavra, Q.AND)
 
         # Verifica existência da lista, filtra de acordo com seu conteúdo e retorna os resultados em páginas
         if lista_pesquisa:
-            lista = Atestados.objects.filter(lista_pesquisa).order_by('id')
+            lista = Atestados.objects.filter(lista_pesquisa).order_by('data_emissao')
             data['clientes'] = Cliente.objects.all()
             data['empresas'] = Empresa.objects.all()
             if lista:
@@ -158,7 +158,6 @@ def pesquisa_palavra(arquivo, busca):
         for linha in text.split(". "):
             frases.append(linha)
         for k in frases:
-            print(k)
             if k.upper().find(busca.upper()) != -1:
                 pdfFileObj.close()
                 return arquivo
@@ -216,7 +215,7 @@ def view(request, pk):
 def searchall(request):
     if request.user.is_authenticated:
         data = {}
-        todos = Atestados.objects.all().order_by('id')
+        todos = Atestados.objects.all().order_by('data_emissao')
         paginator = Paginator(todos, 6)
         pages = request.GET.get('page')
         data['paginas'] = paginator.get_page(pages)
