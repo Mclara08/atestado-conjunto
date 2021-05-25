@@ -2,8 +2,12 @@ import datetime
 from io import StringIO
 
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.db.models import Q
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_protect
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
@@ -11,11 +15,6 @@ from pdfminer.pdfpage import PDFPage
 
 from app.forms import *
 from app.models import Atestados, Cliente, Empresa
-from django.contrib.auth import authenticate, login, logout
-from django.db.models import Q
-from django.views.decorators.csrf import csrf_protect
-from django.core.paginator import Paginator
-import PyPDF2
 
 
 # Create your views here.
@@ -154,7 +153,7 @@ def pesquisaPalavra(caminho, palavras):
         return None
 
 def conversorPdf(caminho):
-    resource_manager = PDFResourceManager(caching=True)
+    resource_manager = PDFResourceManager(caching=False)
     out_text = StringIO()
     laParams = LAParams()
     text_converter = TextConverter(resource_manager, out_text, laparams=laParams)
@@ -162,7 +161,7 @@ def conversorPdf(caminho):
 
     interpreter = PDFPageInterpreter(resource_manager, text_converter)
 
-    for page in PDFPage.get_pages(fp, pagenos=set(), password="", caching=True, check_extractable=True):
+    for page in PDFPage.get_pages(fp, pagenos=set(), password="", caching=False, check_extractable=True):
         interpreter.process_page(page)
 
     text = out_text.getvalue()
