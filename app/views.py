@@ -56,7 +56,7 @@ def home(request):
 def pesquisa(request):
     if request.user.is_authenticated:
         data = {}
-        lista_pesquisa = Q(id__gt=0) # Criação da lista de pesquisa
+        lista_pesquisa = Q(id__gt=0)  # Criação da lista de pesquisa
 
         # Pegando valor atribuido no formulário para número de identificação do documento
         busca_numero = request.GET.get('busca_numero')
@@ -103,7 +103,7 @@ def pesquisa(request):
         lista_palavra = Q()
         if busca_palavra:
             for registro in Atestados.objects.all():
-                x = pesquisaPalavra(('media/'+str(registro.documento_pdf)), busca_palavra)
+                x = pesquisa_palavra(('media/' + str(registro.documento_pdf)), busca_palavra)
                 if x:
                     lista_palavra.add(Q(documento_pdf=registro.documento_pdf), Q.OR)
 
@@ -144,15 +144,17 @@ def pesquisa(request):
         messages.error(request, 'Usuário não conectado!')
         return redirect('entrar')
 
-def pesquisaPalavra(caminho, palavras):
+
+def pesquisa_palavra(caminho, palavras):
     try:
-        texto = conversorPdf(caminho)
+        texto = conversor_pdf(caminho)
         if texto.find(palavras.upper()) != -1:
             return caminho
     except:
         return None
 
-def conversorPdf(caminho):
+
+def conversor_pdf(caminho):
     resource_manager = PDFResourceManager(caching=False)
     out_text = StringIO()
     laParams = LAParams()
@@ -171,6 +173,7 @@ def conversorPdf(caminho):
     text_converter.close()
     out_text.close()
     return text.upper()
+
 
 def form(request):
     if request.user.is_authenticated:
