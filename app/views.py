@@ -8,10 +8,8 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_protect
-from pdfminer.converter import TextConverter
-from pdfminer.layout import LAParams
-from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-from pdfminer.pdfpage import PDFPage
+import PyPDF2
+import re
 
 from app.forms import *
 from app.models import Atestados, Cliente, Empresa
@@ -148,31 +146,26 @@ def pesquisa(request):
 def pesquisa_palavra(caminho, palavras):
     try:
         texto = conversor_pdf(caminho)
-        if texto.find(palavras.upper()) != -1:
+        busca = palavras.upper()
+        if texto.find(busca) != -1:
             return caminho
     except:
         return None
 
 
 def conversor_pdf(caminho):
-    resource_manager = PDFResourceManager(caching=False)
-    out_text = StringIO()
-    laParams = LAParams()
-    text_converter = TextConverter(resource_manager, out_text, laparams=laParams)
-    fp = open(caminho, 'rb')
+    arquivo = open(caminho, 'rb')
+    dados = PyPDF2.PdfFileReader(arquivo)
+    texto = ""
+    for numero in range(1, dados.numPages):
+        pagina = dados.getPage(numero)
+        texto += pagina.extractText()
 
-    interpreter = PDFPageInterpreter(resource_manager, text_converter)
+    texto = re.sub('\n', '', texto)
 
-    for page in PDFPage.get_pages(fp, pagenos=set(), password="", caching=False, check_extractable=True):
-        interpreter.process_page(page)
+    print(texto)
 
-    text = out_text.getvalue()
-    text = text.replace("\n", " ")
-
-    fp.close()
-    text_converter.close()
-    out_text.close()
-    return text.upper()
+    return texto.upper()
 
 
 def form(request):
