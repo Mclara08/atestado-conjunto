@@ -105,7 +105,7 @@ def pesquisa(request):
             for registro in Atestados.objects.all():
                 x = pesquisaPalavra(('media/'+str(registro.documento_pdf)), busca_palavra)
                 if x:
-                    lista_palavra.add(Q(documento_pdf__iexact=registro.documento_pdf), Q.OR)
+                    lista_palavra.add(Q(documento_pdf=registro.documento_pdf), Q.OR)
 
         # Adicionando atributos na lista para filtrar
         if busca_numero:
@@ -165,6 +165,7 @@ def conversorPdf(caminho):
         interpreter.process_page(page)
 
     text = out_text.getvalue()
+    text = text.replace("\n", " ")
 
     fp.close()
     text_converter.close()
