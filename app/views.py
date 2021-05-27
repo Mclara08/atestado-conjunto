@@ -1,14 +1,20 @@
 import datetime
+from io import StringIO
 
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.db.models import Q
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_protect
+from pdfminer.converter import TextConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.pdfpage import PDFPage
+
 from app.forms import *
 from app.models import Atestados, Cliente, Empresa
-from django.contrib.auth import authenticate, login, logout
-from django.db.models import Q
-from django.views.decorators.csrf import csrf_protect
-from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -39,7 +45,7 @@ def sair(request):
 @login_required(login_url='/entrar')
 def home(request):
     if request.user.is_authenticated:
-        data = {'db': Atestados.objects.all()}
+        data = {'db': Atestados.objects.all().order_by('id')}
         return render(request, 'index.html', data)
     else:
         messages.error(request, 'Usuário não conectado!')
@@ -50,7 +56,7 @@ def home(request):
 def pesquisa(request):
     if request.user.is_authenticated:
         data = {}
-        lista_pesquisa = Q(id__gt=0) # Criação da lista de pesquisa
+        lista_pesquisa = Q(id__gt=0)  # Criação da lista de pesquisa
 
         # Pegando valor atribuido no formulário para número de identificação do documento
         busca_numero = request.GET.get('busca_numero')
@@ -92,6 +98,15 @@ def pesquisa(request):
                 lista_empresa.add(Q(empresa__id=busca_empresa), Q.OR)
             j += 1
 
+        # Pegando valor atribuido no formulário para busca de palavras
+        busca_palavra = request.GET.get('busca_palavra')
+        lista_palavra = Q()
+        if busca_palavra:
+            for registro in Atestados.objects.all():
+                x = pesquisa_palavra(('media/' + str(registro.documento_pdf)), busca_palavra)
+                if x:
+                    lista_palavra.add(Q(documento_pdf=registro.documento_pdf), Q.OR)
+
         # Adicionando atributos na lista para filtrar
         if busca_numero:
             lista_pesquisa.add(Q(numero_documento=busca_numero), Q.AND)
@@ -108,10 +123,13 @@ def pesquisa(request):
             lista_pesquisa.add(lista_cliente, Q.AND)
         if lista_empresa:
             lista_pesquisa.add(lista_empresa, Q.AND)
+        if lista_palavra:
+            messages.success(request, "Alguns dos PDFs podem ser ilegíveis, portanto, não aparecerão na tabela abaixo.")
+            lista_pesquisa.add(lista_palavra, Q.AND)
 
         # Verifica existência da lista, filtra de acordo com seu conteúdo e retorna os resultados em páginas
         if lista_pesquisa:
-            lista = Atestados.objects.filter(lista_pesquisa)
+            lista = Atestados.objects.filter(lista_pesquisa).order_by('data_emissao')
             data['clientes'] = Cliente.objects.all()
             data['empresas'] = Empresa.objects.all()
             if lista:
@@ -122,11 +140,41 @@ def pesquisa(request):
             elif not lista:
                 return render(request, 'pesquisa.html', data)
             else:
-                messages.error(request, 'Sistema não contém nenhum registro com essa(s) especificação(s)!')
+                messages.error(request, 'Sistema não contém nenhum cadastro com essa(s) especificação(s)!')
                 return redirect('pesquisa')
     else:
         messages.error(request, 'Usuário não conectado!')
         return redirect('entrar')
+
+
+def pesquisa_palavra(caminho, palavras):
+    try:
+        texto = conversor_pdf(caminho)
+        if texto.find(palavras.upper()) != -1:
+            return caminho
+    except:
+        return None
+
+
+def conversor_pdf(caminho):
+    resource_manager = PDFResourceManager(caching=False)
+    out_text = StringIO()
+    laParams = LAParams()
+    text_converter = TextConverter(resource_manager, out_text, laparams=laParams)
+    fp = open(caminho, 'rb')
+
+    interpreter = PDFPageInterpreter(resource_manager, text_converter)
+
+    for page in PDFPage.get_pages(fp, pagenos=set(), password="", caching=False, check_extractable=True):
+        interpreter.process_page(page)
+
+    text = out_text.getvalue()
+    text = text.replace("\n", " ")
+
+    fp.close()
+    text_converter.close()
+    out_text.close()
+    return text.upper()
 
 
 def form(request):
@@ -180,7 +228,7 @@ def view(request, pk):
 def searchall(request):
     if request.user.is_authenticated:
         data = {}
-        todos = Atestados.objects.all()
+        todos = Atestados.objects.all().order_by('data_emissao')
         paginator = Paginator(todos, 6)
         pages = request.GET.get('page')
         data['paginas'] = paginator.get_page(pages)
