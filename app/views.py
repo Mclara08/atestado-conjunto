@@ -1,4 +1,4 @@
-import datetime
+from datetime import *
 from io import StringIO
 
 from django.contrib import messages
@@ -13,7 +13,8 @@ from pdfminer.layout import LAParams
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.pdfpage import PDFPage
 
-from app.forms import *
+from app.forms import AtestadosForm
+from app.models import *
 from app.models import Atestados, Cliente, Empresa
 
 
@@ -191,7 +192,7 @@ def create(request):
     if request.user.is_authenticated:
         form = AtestadosForm(request.POST, request.FILES or None)
         if form.is_valid():
-            if form.cleaned_data['data_emissao'] > datetime.date.today():
+            if form.cleaned_data['data_emissao'] > date.today():
                 messages.error(request,
                                'Operação não pôde ser realizada! A data de emissão deve ser igual ou inferior à data do dia de hoje.')
                 return redirect('form')
